@@ -43,6 +43,8 @@ package nl.pvanassen.bplist.ext.nanoxml;
  */
 public class XMLParseException extends RuntimeException {
 
+    private static final long serialVersionUID = 6392534332039988250L;
+
     /**
      * Indicates that no line number has been associated with this exception.
      */

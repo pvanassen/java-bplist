@@ -16,10 +16,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
@@ -137,11 +138,11 @@ public class BinaryPListParser {
     /**
      * Total count of ofsets.
      */
-    private int offsetCount;
+//    private int offsetCount;
     /**
      * Total count of objects.
      */
-    private int objectCount;
+//    private int objectCount;
     /**
      * Offset in file of top level offset in offset table.
      */
@@ -150,7 +151,7 @@ public class BinaryPListParser {
      * Object table. We gradually fill in objects from the binary PList object
      * table into this list.
      */
-    private ArrayList objectTable;
+    private List<Object> objectTable;
 
     /** Holder for a binary PList Uid element. */
     private static class BPLUid {
@@ -172,7 +173,7 @@ public class BinaryPListParser {
      */
     private static class BPLArray {
 
-	ArrayList objectTable;
+	List<Object> objectTable;
 	int[] objref;
 
 	public Object getValue(int i) {
@@ -203,7 +204,7 @@ public class BinaryPListParser {
      */
     private static class BPLDict {
 
-	ArrayList objectTable;
+	List<Object> objectTable;
 	int[] keyref;
 	int[] objref;
 
@@ -284,11 +285,11 @@ public class BinaryPListParser {
 	    // element # in offset table which is top level object
 	    raf.seek(raf.length() - 32);
 	    // count of offset ints in offset table
-	    offsetCount = (int) raf.readLong();
+	    //offsetCount = (int) raf.readLong();
 	    // count of object refs in arrays and dicts
 	    refCount = (int) raf.readLong();
 	    // count of offsets in offset table (also is number of objects)
-	    objectCount = (int) raf.readLong();
+	    //objectCount = (int) raf.readLong();
 	    // element # in offset table which is top level object
 	    topLevelOffset = (int) raf.readLong();
 	    buf = new byte[topLevelOffset - 8];
@@ -302,10 +303,10 @@ public class BinaryPListParser {
 
 	// Parse the OBJECT TABLE
 	// ----------------------
-	objectTable = new ArrayList();
+	objectTable = new LinkedList<Object>();
 	DataInputStream in = null;
 	try {
-	    in = new DataInputStream(pos = new PosByteArrayInputStream(buf));
+	    in = new DataInputStream(new ByteArrayInputStream(buf));
 	    parseObjectTable(in);
 	} finally {
 	    if (in != null) {
@@ -314,31 +315,32 @@ public class BinaryPListParser {
 	}
 
 	// Convert the object table to XML and return it
-	XMLElement root = new XMLElement(new HashMap(), false, false);
+	XMLElement root = new XMLElement(new HashMap<String,char[]>(), false, false);
 	root.setName("plist");
 	root.setAttribute("version", "1.0");
 	convertObjectTableToXML(root, objectTable.get(0));
 	return root;
     }
 
+    /*
     private long getPosition() {
 	return pos.getPos() + 8;
     }
-
-    private PosByteArrayInputStream pos;
-
+*/
+//    private PosByteArrayInputStream pos;
+/*
     private static class PosByteArrayInputStream extends ByteArrayInputStream {
 
 	public PosByteArrayInputStream(byte[] buf) {
 	    super(buf);
 	}
 
-	public int getPos() {
+	private int getPos() {
 	    return pos;
 	}
 
     }
-
+*/
     /**
      * Converts the object table in the binary PList into an XMLElement.
      */
@@ -737,10 +739,10 @@ public class BinaryPListParser {
     /**
      * unknown 0011 0000 ... // 8 byte float follows, big-endian bytes
      */
-    private void parseUnknown(DataInputStream in) throws IOException {
+/*    private void parseUnknown(DataInputStream in) throws IOException {
 	in.skipBytes(1);
 	objectTable.add("unknown");
-    }
+    }*/
 
     /**
      * date 0011 0011 ... // 8 byte float follows, big-endian bytes

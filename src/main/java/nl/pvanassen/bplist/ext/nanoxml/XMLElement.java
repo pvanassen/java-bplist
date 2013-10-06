@@ -41,6 +41,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * XMLElement is a representation of an XML object. The object is able to parse
@@ -158,7 +161,7 @@ public class XMLElement {
      * </dd>
      * </dl>
      */
-    private HashMap<String, String> attributes;
+    private Map<String, String> attributes;
 
     /**
      * Child iterator of the element.
@@ -175,7 +178,7 @@ public class XMLElement {
      * </dd>
      * </dl>
      */
-    private ArrayList<XMLElement> children;
+    private List<XMLElement> children;
 
     /**
      * The name of the element.
@@ -230,7 +233,7 @@ public class XMLElement {
      * </dd>
      * </dl>
      */
-    private HashMap entities;
+    private Map<String,char[]> entities;
 
     /**
      * The line number where the element starts.
@@ -322,7 +325,7 @@ public class XMLElement {
      *      boolean)
      */
     public XMLElement() {
-	this(new HashMap(), false, true, true);
+	this(new HashMap<String,char[]>(), false, true, true);
     }
 
     /**
@@ -367,7 +370,7 @@ public class XMLElement {
      * @see XMLElement#XMLElement(java.util.HashMap,boolean) XMLElement(HashMap,
      *      boolean)
      */
-    public XMLElement(HashMap entities) {
+    public XMLElement(Map<String,char[]> entities) {
 	this(entities, false, true, true);
     }
 
@@ -406,7 +409,7 @@ public class XMLElement {
      *      boolean)
      */
     public XMLElement(boolean skipLeadingWhitespace) {
-	this(new HashMap(), skipLeadingWhitespace, true, true);
+	this(new HashMap<String,char[]>(), skipLeadingWhitespace, true, true);
     }
 
     /**
@@ -453,7 +456,7 @@ public class XMLElement {
      * @see XMLElement#XMLElement(boolean)
      * @see XMLElement#XMLElement(java.util.HashMap) XMLElement(HashMap)
      */
-    public XMLElement(HashMap entities, boolean skipLeadingWhitespace) {
+    public XMLElement(Map<String,char[]> entities, boolean skipLeadingWhitespace) {
 	this(entities, skipLeadingWhitespace, true, true);
     }
 
@@ -501,7 +504,7 @@ public class XMLElement {
      * @see XMLElement#XMLElement(java.util.HashMap,boolean) XMLElement(HashMap,
      *      boolean)
      */
-    public XMLElement(HashMap entities, boolean skipLeadingWhitespace,
+    public XMLElement(Map<String,char[]> entities, boolean skipLeadingWhitespace,
 	    boolean ignoreCase) {
 	this(entities, skipLeadingWhitespace, true, ignoreCase);
     }
@@ -552,25 +555,16 @@ public class XMLElement {
      * 
      * @see XMLElement#createAnotherElement()
      */
-    protected XMLElement(HashMap entities, boolean skipLeadingWhitespace,
+    protected XMLElement(Map<String,char[]> entities, boolean skipLeadingWhitespace,
 	    boolean fillBasicConversionTable, boolean ignoreCase) {
 	this.ignoreWhitespace = skipLeadingWhitespace;
 	this.ignoreCase = ignoreCase;
 	this.name = null;
 	this.contents = "";
-	this.attributes = new HashMap();
-	this.children = new ArrayList();
+	this.attributes = new HashMap<String,String>();
+	this.children = new LinkedList<XMLElement>();
 	this.entities = entities;
 	this.lineNr = 0;
-	Iterator iter = this.entities.keySet().iterator();
-	while (iter.hasNext()) {
-	    Object key = iter.next();
-	    Object value = this.entities.get(key);
-	    if (value instanceof String) {
-		value = ((String) value).toCharArray();
-		this.entities.put(key, value);
-	    }
-	}
 	if (fillBasicConversionTable) {
 	    this.entities.put("amp", new char[] { '&' });
 	    this.entities.put("quot", new char[] { '"' });
@@ -898,7 +892,7 @@ public class XMLElement {
      *      java.lang.String, boolean) getBooleanAttribute(String, String,
      *      String, boolean)
      */
-    public Iterator enumerateAttributeNames() {
+    public Iterator<String> enumerateAttributeNames() {
 	return this.attributes.keySet().iterator();
     }
 
@@ -909,7 +903,7 @@ public class XMLElement {
      *             enumerateAttributeNames} instead.
      */
     @Deprecated
-    public Iterator enumeratePropertyNames() {
+    public Iterator<String> enumeratePropertyNames() {
 	return this.enumerateAttributeNames();
     }
 
@@ -930,7 +924,7 @@ public class XMLElement {
      * @see XMLElement#getChildren()
      * @see XMLElement#removeChild(XMLElement) removeChild(XMLElement)
      */
-    public Iterator iterateChildren() {
+    public Iterator<XMLElement> iterateChildren() {
 	return this.children.iterator();
     }
 
@@ -952,14 +946,8 @@ public class XMLElement {
      * @see XMLElement#iterateChildren()
      * @see XMLElement#removeChild(XMLElement) removeChild(XMLElement)
      */
-    public ArrayList getChildren() {
-	try {
-	    return (ArrayList) this.children.clone();
-	} catch (Exception e) {
-	    // this never happens, however, some Java compilers are so
-	    // braindead that they require this exception clause
-	    return null;
-	}
+    public ArrayList<XMLElement> getChildren() {
+	return new ArrayList<XMLElement>(this.children);
     }
 
     /**
@@ -1112,12 +1100,12 @@ public class XMLElement {
      * @see XMLElement#getAttribute(java.lang.String, java.lang.Object)
      *      getAttribute(String, Object)
      */
-    public Object getAttribute(String name, HashMap valueSet,
+    public Object getAttribute(String name, Map<String,Object> valueSet,
 	    String defaultKey, boolean allowLiterals) {
 	if (this.ignoreCase) {
 	    name = name.toUpperCase();
 	}
-	Object key = this.attributes.get(name);
+	String key = this.attributes.get(name);
 	Object result;
 	if (key == null) {
 	    key = defaultKey;
@@ -1241,7 +1229,7 @@ public class XMLElement {
      * @see XMLElement#getStringAttribute(java.lang.String, java.lang.String)
      *      getStringAttribute(String, String)
      */
-    public String getStringAttribute(String name, HashMap valueSet,
+    public String getStringAttribute(String name, Map<String,Object> valueSet,
 	    String defaultKey, boolean allowLiterals) {
 	return (String) this.getAttribute(name, valueSet, defaultKey,
 		allowLiterals);
@@ -1364,7 +1352,7 @@ public class XMLElement {
      * @see XMLElement#getIntAttribute(java.lang.String, int)
      *      getIntAttribute(String, int)
      */
-    public int getIntAttribute(String name, HashMap valueSet,
+    public int getIntAttribute(String name, Map<String,Object> valueSet,
 	    String defaultKey, boolean allowLiteralNumbers) {
 	if (this.ignoreCase) {
 	    name = name.toUpperCase();
@@ -1512,7 +1500,7 @@ public class XMLElement {
      * @see XMLElement#getDoubleAttribute(java.lang.String, double)
      *      getDoubleAttribute(String, double)
      */
-    public double getDoubleAttribute(String name, HashMap valueSet,
+    public double getDoubleAttribute(String name, Map<String,Object> valueSet,
 	    String defaultKey, boolean allowLiteralNumbers) {
 	if (this.ignoreCase) {
 	    name = name.toUpperCase();
@@ -1602,7 +1590,7 @@ public class XMLElement {
      *             getIntAttribute} instead.
      */
     @Deprecated
-    public int getIntProperty(String name, HashMap valueSet, String defaultKey) {
+    public int getIntProperty(String name, Map<String,Object> valueSet, String defaultKey) {
 	return this.getIntAttribute(name, valueSet, defaultKey, false);
     }
 
@@ -1673,7 +1661,7 @@ public class XMLElement {
      *             getAttribute} instead.
      */
     @Deprecated
-    public Object getProperty(String name, HashMap valueSet, String defaultKey) {
+    public Object getProperty(String name, Map<String,Object> valueSet, String defaultKey) {
 	return this.getAttribute(name, valueSet, defaultKey, false);
     }
 
@@ -1685,7 +1673,7 @@ public class XMLElement {
      *             getStringAttribute} instead.
      */
     @Deprecated
-    public String getStringProperty(String name, HashMap valueSet,
+    public String getStringProperty(String name, Map<String,Object> valueSet,
 	    String defaultKey) {
 	return this.getStringAttribute(name, valueSet, defaultKey, false);
     }
@@ -1698,7 +1686,7 @@ public class XMLElement {
      *             getIntAttribute} instead.
      */
     @Deprecated
-    public int getSpecialIntProperty(String name, HashMap valueSet,
+    public int getSpecialIntProperty(String name,  Map<String,Object> valueSet,
 	    String defaultKey) {
 	return this.getIntAttribute(name, valueSet, defaultKey, true);
     }
@@ -1711,7 +1699,7 @@ public class XMLElement {
      *             getDoubleAttribute} instead.
      */
     @Deprecated
-    public double getSpecialDoubleProperty(String name, HashMap valueSet,
+    public double getSpecialDoubleProperty(String name,  Map<String,Object> valueSet,
 	    String defaultKey) {
 	return this.getDoubleAttribute(name, valueSet, defaultKey, true);
     }
@@ -1816,8 +1804,8 @@ public class XMLElement {
 	    throws IOException, XMLParseException {
 	this.name = null;
 	this.contents = "";
-	this.attributes = new HashMap();
-	this.children = new ArrayList();
+	this.attributes = new HashMap<String,String>();
+	this.children = new LinkedList<XMLElement>();
 	this.charReadTooMuch = '\0';
 	this.reader = reader;
 	this.parserLineNr = startingLineNr;
@@ -2349,10 +2337,10 @@ public class XMLElement {
 	writer.write('<');
 	writer.write(this.name);
 	if (!this.attributes.isEmpty()) {
-	    Iterator iter = this.attributes.keySet().iterator();
+	    Iterator<String> iter = this.attributes.keySet().iterator();
 	    while (iter.hasNext()) {
 		writer.write(' ');
-		String key = (String) iter.next();
+		String key = iter.next();
 		String value = this.attributes.get(key);
 		writer.write(key);
 		writer.write('=');
@@ -2373,9 +2361,9 @@ public class XMLElement {
 	    writer.write('>');
 	} else {
 	    writer.write('>');
-	    Iterator iter = this.iterateChildren();
+	    Iterator<XMLElement> iter = this.iterateChildren();
 	    while (iter.hasNext()) {
-		XMLElement child = (XMLElement) iter.next();
+		XMLElement child = iter.next();
 		child.write(writer);
 	    }
 	    writer.write('<');
