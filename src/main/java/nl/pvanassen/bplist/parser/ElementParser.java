@@ -1,10 +1,14 @@
 package nl.pvanassen.bplist.parser;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -16,6 +20,7 @@ import nl.pvanassen.bplist.parser.objects.BPLArray;
 import nl.pvanassen.bplist.parser.objects.BPLDict;
 import nl.pvanassen.bplist.parser.objects.BPLUid;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +33,65 @@ public class ElementParser {
     /** Time interval based dates are measured in seconds from 2001-01-01. */
     private final static long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(
 	    2001, 0, 1, 1, 0, 0).getTimeInMillis();
+
+    public List<Object> parseObjectTable(File file) throws IOException {
+	RandomAccessFile raf = null;
+	try {
+	    raf = new RandomAccessFile(file, "r");
+	    return parseObjectTable(raf);
+	} finally {
+	    IOUtils.closeQuietly(raf);
+	}
+    }
+
+    /**
+     * Parse object table with a random access file. This method will not close
+     * the file for you.
+     * 
+     * @param raf
+     *            Random access file
+     * @return List of objects parsed
+     * @throws IOException
+     *             In case of an error
+     */
+    public List<Object> parseObjectTable(RandomAccessFile raf)
+	    throws IOException {
+
+	// Parse the HEADER
+	// ----------------
+	// magic number ("bplist")
+	// file format version ("00")
+	int bpli = raf.readInt();
+	int st00 = raf.readInt();
+	if (bpli != 0x62706c69 || st00 != 0x73743030) {
+	    throw new IOException(
+		    "parseHeader: File does not start with 'bplist00' magic.");
+	}
+
+	// Parse the TRAILER
+	// ----------------
+	// byte size of offset ints in offset table
+	// byte size of object refs in arrays and dicts
+	// number of offsets in offset table (also is number of objects)
+	// element # in offset table which is top level object
+	raf.seek(raf.length() - 32);
+	// count of offset ints in offset table
+	int offsetCount = (int) raf.readLong();
+	// count of object refs in arrays and dicts
+	int refCount = (int) raf.readLong();
+	// count of offsets in offset table (also is number of objects)
+	int objectCount = (int) raf.readLong();
+	// element # in offset table which is top level object
+	int topLevelOffset = (int) raf.readLong();
+	raf.seek(8);
+
+	// Read everything in memory hmmmm
+	byte[] buf = new byte[topLevelOffset - 8];
+	raf.readFully(buf);
+	ByteArrayInputStream stream = new ByteArrayInputStream(buf);
+	
+	return parseObjectTable(new DataInputStream(stream), refCount);
+    }
 
     /**
      * Object Formats (marker byte followed by additional info in some cases)
@@ -59,15 +123,16 @@ public class ElementParser {
      * </ul>
      * 
      */
-    public void parseObjectTable(DataInputStream in, int refCount,
-	    List<Object> objectTable) throws IOException {
+    private List<Object> parseObjectTable(DataInputStream in, int refCount)
+	    throws IOException {
+	List<Object> objectTable = new LinkedList<Object>();
 	int marker;
 	while ((marker = in.read()) != -1) {
 	    // System.err.println("parseObjectTable marker=" +
 	    // Integer.toBinaryString(marker)+" 0x"+Integer.toHexString(marker)+" @0x"+Long.toHexString(getPosition()));
 	    switch ((marker & 0xf0) >> 4) {
 	    case 0: {
-		parseBoolean(in, marker & 0xf, objectTable);
+		parseBoolean(marker & 0xf, objectTable);
 		break;
 	    }
 	    case 1: {
@@ -120,7 +185,7 @@ public class ElementParser {
 		    logger.debug("parseObjectTable: illegal marker "
 			    + Integer.toBinaryString(marker));
 		}
-		return;
+		return objectTable;
 		// throw new
 		// IOException("parseObjectTable: illegal marker "+Integer.toBinaryString(marker));
 		// break;
@@ -184,6 +249,7 @@ public class ElementParser {
 	    }
 	    }
 	}
+	return objectTable;
     }
 
     /**
@@ -217,8 +283,8 @@ public class ElementParser {
      * null 0000 0000 bool 0000 1000 // false bool 0000 1001 // true fill 0000
      * 1111 // fill byte
      */
-    private void parseBoolean(DataInputStream in, int primitive,
-	    List<Object> objectTable) throws IOException {
+    private void parseBoolean(int primitive, List<Object> objectTable)
+	    throws IOException {
 	switch (primitive) {
 	case 0:
 	    objectTable.add(null);

@@ -144,7 +144,7 @@ public class BinaryPListParser {
      */
     private List<Object> objectTable;
 
-    private ElementParser parser;
+    private ElementParser parser = new ElementParser();
     /**
      * Creates a new instance.
      */
@@ -160,58 +160,10 @@ public class BinaryPListParser {
      * @return Returns the parsed XMLElement.
      */
     public XMLElement parse(File file) throws IOException {
-	RandomAccessFile raf = null;
-	byte[] buf = null;
-	try {
-	    raf = new RandomAccessFile(file, "r");
-
-	    // Parse the HEADER
-	    // ----------------
-	    // magic number ("bplist")
-	    // file format version ("00")
-	    int bpli = raf.readInt();
-	    int st00 = raf.readInt();
-	    if (bpli != 0x62706c69 || st00 != 0x73743030) {
-		throw new IOException(
-			"parseHeader: File does not start with 'bplist00' magic.");
-	    }
-
-	    // Parse the TRAILER
-	    // ----------------
-	    // byte size of offset ints in offset table
-	    // byte size of object refs in arrays and dicts
-	    // number of offsets in offset table (also is number of objects)
-	    // element # in offset table which is top level object
-	    raf.seek(raf.length() - 32);
-	    // count of offset ints in offset table
-	    //offsetCount = (int) raf.readLong();
-	    // count of object refs in arrays and dicts
-	    refCount = (int) raf.readLong();
-	    // count of offsets in offset table (also is number of objects)
-	    //objectCount = (int) raf.readLong();
-	    // element # in offset table which is top level object
-	    topLevelOffset = (int) raf.readLong();
-	    buf = new byte[topLevelOffset - 8];
-	    raf.seek(8);
-	    raf.readFully(buf);
-	} finally {
-	    if (raf != null) {
-		raf.close();
-	    }
-	}
 
 	// Parse the OBJECT TABLE
 	// ----------------------
-	objectTable = new LinkedList<Object>();
-	DataInputStream in = null;
-	try {
-	    in = new DataInputStream(new ByteArrayInputStream(buf));
-	    parser.parseObjectTable(in, refCount, objectTable);
-	} finally {
-	    if (in != null) {
-		in.close();
-	    }
-	}
+	objectTable = parser.parseObjectTable(file);
 
 	// Convert the object table to XML and return it
 	XMLElement root = new XMLElement(new HashMap<String,char[]>(), false, false);
