@@ -1,15 +1,20 @@
 package nl.pvanassen.bplist.parser;
 
+/**
+ * Types of binary data
+ * @author Paul van Assen
+ *
+ */
 public enum BPListType {
-    NULL, 
     BOOLEAN, 
     LONG, 
     FLOAT, 
     DOUBLE, 
     DATE, 
     DATA, 
-    STRING, 
+    ASCII_STRING,
+    UNICODE_STRING,
     UID, 
-    DICT, 
-    ARRAY 
+    SHORT_DICT, BYTE_DICT, 
+    SHORT_ARRAY, BYTE_ARRAY
 }

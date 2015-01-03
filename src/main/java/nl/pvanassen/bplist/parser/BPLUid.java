@@ -1,11 +1,10 @@
 package nl.pvanassen.bplist.parser;
 
 /** Holder for a binary PList Uid element. */
-public class BPLUid implements BPListElement<Integer> {
-
+class BPLUid implements BPListElement<Integer> {
     private final int number;
 
-    public BPLUid(int number) {
+    BPLUid(int number) {
         super();
         this.number = number;
     }
@@ -16,10 +15,6 @@ public class BPLUid implements BPListElement<Integer> {
     
     @Override
     public Integer getValue() {
-        return number;
-    }
-
-    public int getNumber() {
         return number;
     }
 }

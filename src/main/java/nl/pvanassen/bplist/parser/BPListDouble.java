@@ -1,9 +1,9 @@
 package nl.pvanassen.bplist.parser;
 
-public class BPListDouble implements BPListElement<Double> {
+class BPListDouble implements BPListElement<Double> {
     private final double value;
     
-    public BPListDouble(double value) {
+    BPListDouble(double value) {
         this.value = value;
     }
     @Override

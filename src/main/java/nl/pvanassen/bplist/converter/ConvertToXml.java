@@ -8,7 +8,7 @@
  * license agreement you entered into with Werner Randelshofer.
  * For details see accompanying license terms.
  */
-package nl.pvanassen.bplist;
+package nl.pvanassen.bplist.converter;
 
 import java.io.*;
 import java.util.*;
@@ -103,12 +103,11 @@ import nl.pvanassen.bplist.parser.*;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BinaryPListParser {
-    private ElementParser parser = new ElementParser();
-
+public class ConvertToXml {
     /** Factory for generating XML data types. */
     private final static DatatypeFactory DATATYPE_FACTORY;
-
+    private final ElementParser parser = new ElementParser();
+    
     static {
         try {
             DATATYPE_FACTORY = DatatypeFactory.newInstance();
@@ -121,12 +120,28 @@ public class BinaryPListParser {
      * Parses a binary PList file and turns it into a XMLElement. The XMLElement
      * is equivalent with a XML PList file parsed using NanoXML.
      * 
-     * @param file
-     *            A file containing a binary PList.
+     * @param file bplist to parse
      * @return Returns the parsed XMLElement.
      * @throws IOException If the file is not found
      */
-    public XMLElement parseToXml(List<BPListElement<?>> list) throws IOException {
+    public XMLElement convertToXml(File file) throws IOException {
+        // Convert the object table to XML and return it
+        XMLElement root = new XMLElement(new HashMap<String, char[]>(), false, false);
+        root.setName("plist");
+        root.setAttribute("version", "1.0");
+        convertObjectTableToXML(root, parser.parseObjectTable(file).get(0));
+        return root;
+    }
+    
+    /**
+     * Parses a binary PList file and turns it into a XMLElement. The XMLElement
+     * is equivalent with a XML PList file parsed using NanoXML.
+     * 
+     * @param list Parsed tree
+     * @return Returns the parsed XMLElement.
+     * @throws IOException If the file is not found
+     */
+    public XMLElement convertToXml(List<BPListElement<?>> list) throws IOException {
         // Convert the object table to XML and return it
         XMLElement root = new XMLElement(new HashMap<String, char[]>(), false, false);
         root.setName("plist");
@@ -140,47 +155,48 @@ public class BinaryPListParser {
      */
     private void convertObjectTableToXML(XMLElement parent, BPListElement<?> object) {
         XMLElement elem = parent.createAnotherElement();
-        if (object instanceof BPLDict) {
-            BPLDict dict = (BPLDict) object;
+        if (object.getType() == BPListType.SHORT_DICT || object.getType() == BPListType.BYTE_DICT) {
+            Map<String,BPListElement<?>> dictionary = (Map<String,BPListElement<?>>)object.getValue();
             elem.setName("dict");
-            for (int i = 0; i < dict.getKeyref().length; i++) {
+            for (Map.Entry<String,BPListElement<?>> entry : dictionary.entrySet()) {
                 XMLElement key = parent.createAnotherElement();
                 key.setName("key");
-                key.setContent(dict.getKey(i));
+                key.setContent(entry.getKey());
                 elem.addChild(key);
-                convertObjectTableToXML(elem, dict.getValue(i));
+                convertObjectTableToXML(elem, entry.getValue());
             }
-        } else if (object instanceof BPLArray) {
-            BPLArray arr = (BPLArray) object;
+        } else if (object.getType() == BPListType.SHORT_ARRAY || object.getType() == BPListType.BYTE_ARRAY) {
+            List<BPListElement<?>> elements = (List<BPListElement<?>>)object.getValue();
             elem.setName("array");
-            for (int i = 0; i < arr.getObjref().length; i++) {
-                convertObjectTableToXML(elem, arr.getValue(i));
+            for (BPListElement<?> element : elements) {
+                convertObjectTableToXML(elem, element);
             }
-
-        } else if (object instanceof BPListString) {
+        } else if (object.getType() == BPListType.ASCII_STRING || object.getType() == BPListType.UNICODE_STRING) {
             elem.setName("string");
             elem.setContent(object.getValue().toString());
-        } else if (object instanceof BPListLong) {
+        } else if (object.getType() == BPListType.LONG) {
             elem.setName("integer");
             elem.setContent(object.getValue().toString());
-        } else if (object instanceof BPListFloat) {
+        } else if (object.getType() == BPListType.FLOAT) {
             elem.setName("real");
             elem.setContent(object.getValue().toString());
-        } else if (object instanceof BPListDouble) {
+        } else if (object.getType() == BPListType.DOUBLE) {
             elem.setName("real");
             elem.setContent(object.getValue().toString());
-        } else if (object instanceof BPListBoolean) {
+        } else if (object.getType() == BPListType.BOOLEAN) {
             elem.setName("boolean");
             elem.setContent(object.getValue().toString());
-        } else if (object instanceof BPListData) {
+        } else if (object.getType() == BPListType.DATA) {
             elem.setName("data");
-            elem.setContent(Base64.encodeBytes(((BPListData)object).getValue(), Base64.DONT_BREAK_LINES));
-        } else if (object instanceof BPListDate) {
+            BPListElement<byte[]> data = (BPListElement<byte[]>)object; 
+            elem.setContent(Base64.encodeBytes(data.getValue(), Base64.DONT_BREAK_LINES));
+        } else if (object.getType() == BPListType.DATE) {
             elem.setName("date");
-            elem.setContent(fromDate(((BPListDate)object).getValue()).toXMLFormat() + "Z");
-        } else if (object instanceof BPLUid) {
+            BPListElement<Date> date = (BPListElement<Date>)object; 
+            elem.setContent(fromDate(date.getValue()).toXMLFormat() + "Z");
+        } else if (object.getType() == BPListType.UID) {
             elem.setName("UID");
-            elem.setContent(Integer.toString(((BPLUid) object).getNumber()));
+            elem.setContent(object.getValue().toString());
         } else {
             elem.setName("unsupported");
             elem.setContent(object.toString());

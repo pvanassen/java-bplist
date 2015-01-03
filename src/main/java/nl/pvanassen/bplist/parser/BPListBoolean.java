@@ -1,10 +1,10 @@
 package nl.pvanassen.bplist.parser;
 
-public class BPListBoolean implements BPListElement<Boolean> {
+class BPListBoolean implements BPListElement<Boolean> {
     private final Boolean value;
 
-    public static BPListBoolean TRUE = new BPListBoolean(Boolean.TRUE);
-    public static BPListBoolean FALSE = new BPListBoolean(Boolean.FALSE);
+    static BPListBoolean TRUE = new BPListBoolean(Boolean.TRUE);
+    static BPListBoolean FALSE = new BPListBoolean(Boolean.FALSE);
     
     BPListBoolean(Boolean value) {
         this.value = value;

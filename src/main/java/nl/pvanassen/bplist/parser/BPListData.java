@@ -1,9 +1,9 @@
 package nl.pvanassen.bplist.parser;
 
-public class BPListData implements BPListElement<byte[]> {
+class BPListData implements BPListElement<byte[]> {
     private final byte[] value;
     
-    public BPListData(byte[] value) {
+    BPListData(byte[] value) {
         this.value = value;
     }
     @Override

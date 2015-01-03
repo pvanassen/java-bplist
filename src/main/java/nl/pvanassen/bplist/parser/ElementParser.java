@@ -277,16 +277,16 @@ public class ElementParser {
      * count follows
      */
     private void parseByteArray(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
-        BPLArray arr = new BPLArray(objectTable, new int[count]);
+        int[] objref = new int[count];
 
         for (int i = 0; i < count; i++) {
-            arr.getObjref()[i] = in.readByte() & 0xff;
-            if (arr.getObjref()[i] == -1) {
+            objref[i] = in.readByte() & 0xff;
+            if (objref[i] == -1) {
                 throw new IOException("parseByteArray: illegal EOF in objref*");
             }
         }
 
-        objectTable.add(arr);
+        objectTable.add(new BPLArray(objectTable, objref, BPListType.BYTE_ARRAY));
     }
 
     /**
@@ -294,16 +294,16 @@ public class ElementParser {
      * count follows
      */
     private void parseShortArray(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
-        BPLArray arr = new BPLArray(objectTable, new int[count]);
+        int[] objref = new int[count];
 
         for (int i = 0; i < count; i++) {
-            arr.getObjref()[i] = in.readShort() & 0xffff;
-            if (arr.getObjref()[i] == -1) {
+            objref[i] = in.readShort() & 0xffff;
+            if (objref[i] == -1) {
                 throw new IOException("parseShortArray: illegal EOF in objref*");
             }
         }
 
-        objectTable.add(arr);
+        objectTable.add(new BPLArray(objectTable, objref, BPListType.SHORT_ARRAY));
     }
 
     /*
@@ -321,30 +321,32 @@ public class ElementParser {
      * byte dict 1101 nnnn keyref* objref* // nnnn is less than '1111'
      */
     private void parseByteDict(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
-        BPLDict dict = new BPLDict(objectTable, new int[count], new int[count]);
+        int[]keyref = new int[count];
+        int[]objref = new int[count];
 
         for (int i = 0; i < count; i++) {
-            dict.getKeyref()[i] = in.readByte() & 0xff;
+            keyref[i] = in.readByte() & 0xff;
         }
         for (int i = 0; i < count; i++) {
-            dict.getObjref()[i] = in.readByte() & 0xff;
+            objref[i] = in.readByte() & 0xff;
         }
-        objectTable.add(dict);
+        objectTable.add(new BPLDict(objectTable, keyref, objref, BPListType.BYTE_DICT));
     }
 
     /**
      * short dict 1101 ffff int keyref* objref* // int is count
      */
     private void parseShortDict(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
-        BPLDict dict = new BPLDict(objectTable, new int[count], new int[count]);
+        int[]keyref = new int[count];
+        int[]objref = new int[count];
 
         for (int i = 0; i < count; i++) {
-            dict.getKeyref()[i] = in.readShort() & 0xffff;
+            keyref[i] = in.readShort() & 0xffff;
         }
         for (int i = 0; i < count; i++) {
-            dict.getObjref()[i] = in.readShort() & 0xffff;
+            objref[i] = in.readShort() & 0xffff;
         }
-        objectTable.add(dict);
+        objectTable.add(new BPLDict(objectTable, keyref, objref, BPListType.SHORT_DICT));
     }
 
     /**

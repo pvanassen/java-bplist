@@ -5,28 +5,22 @@ import java.util.*;
 /**
  * Holder for a binary PList array element.
  */
-public class BPLArray implements BPListElement<List<BPListElement<?>>> {
+class BPLArray implements BPListElement<List<BPListElement<?>>> {
 
     private final List<BPListElement<?>> objectTable;
     private final int[] objref;
-
-    BPLArray(List<BPListElement<?>> objectTable, int[] objref) {
+    private final BPListType type;
+    
+    BPLArray(List<BPListElement<?>> objectTable, int[] objref, BPListType type) {
         super();
         this.objectTable = objectTable;
         this.objref = objref;
+        this.type = type;
     }
 
-    public BPListElement<?> getValue(int i) {
-        return objectTable.get(objref[i]);
-    }
-
-    public int[] getObjref() {
-        return objref;
-    }
-    
     @Override
     public BPListType getType() {
-        return BPListType.ARRAY;
+        return type;
     }
     
     @Override

@@ -1,9 +1,9 @@
 package nl.pvanassen.bplist.parser;
 
-public class BPListFloat implements BPListElement<Float> {
+class BPListFloat implements BPListElement<Float> {
     private final float value;
     
-    public BPListFloat(float value) {
+    BPListFloat(float value) {
         this.value = value;
     }
     @Override

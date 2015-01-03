@@ -5,22 +5,24 @@ import java.util.*;
 /**
  * Holder for a binary PList dict element.
  */
-public class BPLDict implements BPListElement<Map<String,BPListElement<?>>> {
+class BPLDict implements BPListElement<Map<String,BPListElement<?>>> {
 
     private final List<BPListElement<?>> objectTable;
     private final int[] keyref;
     private final int[] objref;
+    private final BPListType type;
 
-    public BPLDict(List<BPListElement<?>> objectTable, int[] keyref, int[] objref) {
+    BPLDict(List<BPListElement<?>> objectTable, int[] keyref, int[] objref, BPListType type) {
         super();
         this.objectTable = objectTable;
         this.keyref = keyref;
         this.objref = objref;
+        this.type = type;
     }
     
     @Override
     public BPListType getType() {
-         return BPListType.DICT;
+         return type;
     }
     
     @Override
@@ -29,25 +31,9 @@ public class BPLDict implements BPListElement<Map<String,BPListElement<?>>> {
         for (int idx = 0;idx!=keyref.length;idx++) {
             int key = keyref[idx];
             int obj = objref[idx];
-            dict.put(objectTable.get(key).toString(), objectTable.get(obj));
+            dict.put(objectTable.get(key).getValue().toString(), objectTable.get(obj));
         }
         return dict;
-    }
-
-    public String getKey(int i) {
-        return objectTable.get(keyref[i]).getValue().toString();
-    }
-
-    public BPListElement<?> getValue(int i) {
-        return objectTable.get(objref[i]);
-    }
-
-    public int[] getKeyref() {
-        return keyref;
-    }
-
-    public int[] getObjref() {
-        return objref;
     }
 
     @Override
