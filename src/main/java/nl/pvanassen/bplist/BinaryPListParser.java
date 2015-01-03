@@ -104,11 +104,6 @@ import nl.pvanassen.bplist.parser.objects.*;
  * @version $Id$
  */
 public class BinaryPListParser {
-    /**
-     * Object table. We gradually fill in objects from the binary PList object
-     * table into this list.
-     */
-    private List<Object> objectTable;
     private ElementParser parser = new ElementParser();
 
     /**
@@ -124,7 +119,7 @@ public class BinaryPListParser {
 
         // Parse the OBJECT TABLE
         // ----------------------
-        objectTable = parser.parseObjectTable(file);
+        List<Object> objectTable = parser.parseObjectTable(file);
 
         // Convert the object table to XML and return it
         XMLElement root = new XMLElement(new HashMap<String, char[]>(), false, false);
