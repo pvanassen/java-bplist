@@ -1,5 +1,8 @@
 package nl.pvanassen.bplist.ext.base64;
 
+import java.io.*;
+import static nl.pvanassen.bplist.ext.base64.Constants.*;
+
 /* ******** I N N E R C L A S S O U T P U T S T R E A M ******** */
 /**
  * A {@link Base64OutputStream} will write data to another <tt>java.io.OutputStream</tt>, given in the constructor, and
@@ -8,7 +11,7 @@ package nl.pvanassen.bplist.ext.base64;
  * @see Base64
  * @since 1.3
  */
-public class Base64OutputStream extends java.io.FilterOutputStream {
+class Base64OutputStream extends FilterOutputStream {
 
     private boolean encode;
     private int position;
@@ -17,19 +20,6 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
     private int lineLength;
     private boolean breakLines;
     private byte[] b4; // Scratch used in a few places
-    private boolean suspendEncoding;
-
-    /**
-     * Constructs a {@link Base64OutputStream} in ENCODE mode.
-     * 
-     * @param out
-     *            the <tt>java.io.OutputStream</tt> to which data will be
-     *            written.
-     * @since 1.3
-     */
-    public Base64OutputStream(java.io.OutputStream out) {
-        this(out, Base64.ENCODE);
-    } // end constructor
 
     /**
      * Constructs a {@link Base64OutputStream} in either ENCODE or DECODE
@@ -56,7 +46,7 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
      * @see Base64#DONT_BREAK_LINES
      * @since 1.3
      */
-    public Base64OutputStream(java.io.OutputStream out, int options) {
+    Base64OutputStream(java.io.OutputStream out, int options) {
         super(out);
         breakLines = (options & Base64.DONT_BREAK_LINES) != Base64.DONT_BREAK_LINES;
         encode = (options & Base64.ENCODE) == Base64.ENCODE;
@@ -64,7 +54,6 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
         buffer = new byte[bufferLength];
         position = 0;
         lineLength = 0;
-        suspendEncoding = false;
         b4 = new byte[4];
     } // end constructor
 
@@ -79,23 +68,17 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
      * @since 1.3
      */
     @Override
-    public void write(int theByte) throws java.io.IOException {
-        // Encoding suspended?
-        if (suspendEncoding) {
-            super.out.write(theByte);
-            return;
-        } // end if: supsended
-
+    public void write(int theByte) throws IOException {
         // Encode?
         if (encode) {
             buffer[position++] = (byte) theByte;
             if (position >= bufferLength) // Enough to encode.
             {
-                out.write(Base64.encode3to4(b4, buffer, bufferLength));
+                out.write(Encode3to4.encode3to4(b4, buffer, bufferLength));
 
                 lineLength += 4;
-                if (breakLines && (lineLength >= Base64.MAX_LINE_LENGTH)) {
-                    out.write(Base64.NEW_LINE);
+                if (breakLines && (lineLength >= MAX_LINE_LENGTH)) {
+                    out.write(NEW_LINE);
                     lineLength = 0;
                 } // end if: end of line
 
@@ -105,7 +88,7 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
           // Else, Decoding
         else {
             // Meaningful Base64 character?
-            if (Base64.DECODABET[theByte & 0x7f] > Base64.WHITE_SPACE_ENC) {
+            if (Base64.DECODABET[theByte & 0x7f] > WHITE_SPACE_ENC) {
                 buffer[position++] = (byte) theByte;
                 if (position >= bufferLength) // Enough to output.
                 {
@@ -115,8 +98,8 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
                     position = 0;
                 } // end if: enough to output
             } // end if: meaningful base64 character
-            else if (Base64.DECODABET[theByte & 0x7f] != Base64.WHITE_SPACE_ENC) {
-                throw new java.io.IOException("Invalid character in Base64 data.");
+            else if (Base64.DECODABET[theByte & 0x7f] != WHITE_SPACE_ENC) {
+                throw new IOException("Invalid character in Base64 data.");
             } // end else: not white space either
         } // end else: decoding
     } // end write
@@ -134,13 +117,7 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
      * @since 1.3
      */
     @Override
-    public void write(byte[] theBytes, int off, int len) throws java.io.IOException {
-        // Encoding suspended?
-        if (suspendEncoding) {
-            super.out.write(theBytes, off, len);
-            return;
-        } // end if: supsended
-
+    public void write(byte[] theBytes, int off, int len) throws IOException {
         for (int i = 0; i < len; i++) {
             write(theBytes[off + i]);
         } // end for: each byte written
@@ -151,14 +128,14 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
      * Method added by PHIL. [Thanks, PHIL. -Rob] This pads the buffer
      * without closing the stream.
      */
-    public void flushBase64() throws java.io.IOException {
+    private void flushBase64() throws IOException {
         if (position > 0) {
             if (encode) {
-                out.write(Base64.encode3to4(b4, buffer, position));
+                out.write(Encode3to4.encode3to4(b4, buffer, position));
                 position = 0;
             } // end if: encoding
             else {
-                throw new java.io.IOException("Base64 input not properly padded.");
+                throw new IOException("Base64 input not properly padded.");
             } // end else: decoding
         } // end if: buffer partially full
 
@@ -170,7 +147,7 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
      * @since 1.3
      */
     @Override
-    public void close() throws java.io.IOException {
+    public void close() throws IOException {
         // 1. Ensure that pending characters are written
         flushBase64();
 
@@ -180,26 +157,5 @@ public class Base64OutputStream extends java.io.FilterOutputStream {
 
         buffer = null;
         out = null;
-    } // end close
-
-    /**
-     * Suspends encoding of the stream. May be helpful if you need to embed
-     * a piece of base640-encoded data in a stream.
-     * 
-     * @since 1.5.1
-     */
-    public void suspendEncoding() throws java.io.IOException {
-        flushBase64();
-        suspendEncoding = true;
-    } // end suspendEncoding
-
-    /**
-     * Resumes encoding of the stream. May be helpful if you need to embed a
-     * piece of base640-encoded data in a stream.
-     * 
-     * @since 1.5.1
-     */
-    public void resumeEncoding() {
-        suspendEncoding = false;
-    } // end resumeEncoding
-} // end inner class OutputStream
+    }
+}

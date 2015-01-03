@@ -1,5 +1,6 @@
 package nl.pvanassen.bplist.ext.base64;
 
+import static nl.pvanassen.bplist.ext.base64.Constants.*;
 import java.io.FilterInputStream;
 
 /* ******** I N N E R C L A S S I N P U T S T R E A M ******** */
@@ -89,7 +90,7 @@ class Base64InputStream extends FilterInputStream {
                 } // end for: each needed input byte
 
                 if (numBinaryBytes > 0) {
-                    Base64.encode3to4(b3, 0, numBinaryBytes, buffer, 0);
+                    Encode3to4.encode3to4(b3, 0, numBinaryBytes, buffer, 0);
                     position = 0;
                     numSigBytes = 4;
                 } // end if: got data
@@ -106,7 +107,7 @@ class Base64InputStream extends FilterInputStream {
                     int b = 0;
                     do {
                         b = in.read();
-                    } while ((b >= 0) && (Base64.DECODABET[b & 0x7f] <= Base64.WHITE_SPACE_ENC));
+                    } while ((b >= 0) && (Base64.DECODABET[b & 0x7f] <= WHITE_SPACE_ENC));
 
                     if (b < 0) {
                         break; // Reads a -1 if end of stream
@@ -136,7 +137,7 @@ class Base64InputStream extends FilterInputStream {
                 return -1;
             }
 
-            if (encode && breakLines && (lineLength >= Base64.MAX_LINE_LENGTH)) {
+            if (encode && breakLines && (lineLength >= MAX_LINE_LENGTH)) {
                 lineLength = 0;
                 return '\n';
             } // end if
