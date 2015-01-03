@@ -88,17 +88,17 @@ class Base64OutputStream extends FilterOutputStream {
           // Else, Decoding
         else {
             // Meaningful Base64 character?
-            if (Base64.DECODABET[theByte & 0x7f] > WHITE_SPACE_ENC) {
+            if (DECODABET[theByte & 0x7f] > WHITE_SPACE_ENC) {
                 buffer[position++] = (byte) theByte;
                 if (position >= bufferLength) // Enough to output.
                 {
-                    int len = Base64.decode4to3(buffer, 0, b4, 0);
+                    int len = Decode4to3.decode4to3(buffer, 0, b4, 0);
                     out.write(b4, 0, len);
                     // out.write( Base64.decode4to3( buffer ) );
                     position = 0;
                 } // end if: enough to output
             } // end if: meaningful base64 character
-            else if (Base64.DECODABET[theByte & 0x7f] != WHITE_SPACE_ENC) {
+            else if (DECODABET[theByte & 0x7f] != WHITE_SPACE_ENC) {
                 throw new IOException("Invalid character in Base64 data.");
             } // end else: not white space either
         } // end else: decoding
