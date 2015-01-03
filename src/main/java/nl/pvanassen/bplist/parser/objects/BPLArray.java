@@ -21,7 +21,9 @@ public class BPLArray {
     }
 
     public int[] getObjref() {
-        return objref;
+        int[] returnValue = new int[objref.length];
+        System.arraycopy(objref, 0, returnValue, 0, objref.length);
+        return returnValue;
     }
 
     @Override
