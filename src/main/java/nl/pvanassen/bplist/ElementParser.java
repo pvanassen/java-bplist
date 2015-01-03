@@ -1,4 +1,4 @@
-package nl.pvanassen.bplist.parser;
+package nl.pvanassen.bplist;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -11,16 +11,38 @@ import nl.pvanassen.bplist.parser.objects.*;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.*;
 
-public class ElementParser {
+/**
+ * Parser for reading the bplist
+ * @author Paul van Assen
+ *
+ */
+class ElementParser {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /** Factory for generating XML data types. */
-    private static DatatypeFactory datatypeFactory;
+    private final static DatatypeFactory DATATYPE_FACTORY;
 
     /** Time interval based dates are measured in seconds from 2001-01-01. */
     private final static long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(2001, 0, 1, 1, 0, 0).getTimeInMillis();
+    static {
+        try {
+            DATATYPE_FACTORY = DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException ex) {
+            throw new RuntimeException("Can't create XML datatype factory.", ex);
+        }
+    }
 
-    public List<Object> parseObjectTable(File file) throws IOException {
+
+    /**
+     * Parse object table with a random access file. This method will not close
+     * the file for you.
+     *
+     * @param file File object
+     * @return List of objects parsed
+     * @throws IOException
+     *             In case of an error
+     */
+    List<Object> parseObjectTable(File file) throws IOException {
         RandomAccessFile raf = null;
         try {
             raf = new RandomAccessFile(file, "r");
@@ -40,7 +62,7 @@ public class ElementParser {
      * @throws IOException
      *             In case of an error
      */
-    public List<Object> parseObjectTable(RandomAccessFile raf) throws IOException {
+    private List<Object> parseObjectTable(RandomAccessFile raf) throws IOException {
 
         // Parse the HEADER
         // ----------------
@@ -432,23 +454,9 @@ public class ElementParser {
     private static XMLGregorianCalendar fromTimerInterval(double timerInterval) {
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(new Date(TIMER_INTERVAL_TIMEBASE + ((long) timerInterval * 1000L)));
-        XMLGregorianCalendar xmlgc = getDatatypeFactory().newXMLGregorianCalendar(gc);
+        XMLGregorianCalendar xmlgc = DATATYPE_FACTORY.newXMLGregorianCalendar(gc);
         xmlgc.setFractionalSecond(null);
         xmlgc.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
         return xmlgc;
-    }
-
-    /** Gets the factory for XML data types. */
-    private static DatatypeFactory getDatatypeFactory() {
-        if (datatypeFactory == null) {
-            try {
-                datatypeFactory = DatatypeFactory.newInstance();
-            } catch (DatatypeConfigurationException ex) {
-                InternalError ie = new InternalError("Can't create XML datatype factory.");
-                ie.initCause(ex);
-                throw ie;
-            }
-        }
-        return datatypeFactory;
     }
 }

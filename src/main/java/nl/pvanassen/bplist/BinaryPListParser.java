@@ -17,7 +17,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import nl.pvanassen.bplist.ext.base64.Base64;
 import nl.pvanassen.bplist.ext.nanoxml.XMLElement;
-import nl.pvanassen.bplist.parser.ElementParser;
 import nl.pvanassen.bplist.parser.objects.*;
 
 /**
