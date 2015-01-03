@@ -27,11 +27,15 @@ public class BPLDict {
     }
 
     public int[] getKeyref() {
-        return keyref;
+        int[] returnValue = new int[keyref.length];
+        System.arraycopy(keyref, 0, returnValue, 0, keyref.length);
+        return returnValue;
     }
 
     public int[] getObjref() {
-        return objref;
+        int[] returnValue = new int[objref.length];
+        System.arraycopy(objref, 0, returnValue, 0, objref.length);
+        return returnValue;
     }
 
     @Override
