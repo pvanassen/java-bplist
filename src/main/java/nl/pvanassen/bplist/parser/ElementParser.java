@@ -1,37 +1,19 @@
-package nl.pvanassen.bplist;
+package nl.pvanassen.bplist.parser;
 
 import java.io.*;
 import java.math.BigInteger;
 import java.util.*;
-
-import javax.xml.datatype.*;
-
-import nl.pvanassen.bplist.parser.objects.*;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.*;
 
 /**
  * Parser for reading the bplist
+ * 
  * @author Paul van Assen
- *
  */
-class ElementParser {
+public class ElementParser {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    /** Factory for generating XML data types. */
-    private final static DatatypeFactory DATATYPE_FACTORY;
-
-    /** Time interval based dates are measured in seconds from 2001-01-01. */
-    private final static long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(2001, 0, 1, 1, 0, 0).getTimeInMillis();
-    static {
-        try {
-            DATATYPE_FACTORY = DatatypeFactory.newInstance();
-        } catch (DatatypeConfigurationException ex) {
-            throw new RuntimeException("Can't create XML datatype factory.", ex);
-        }
-    }
-
 
     /**
      * Parse object table with a random access file. This method will not close
@@ -42,7 +24,7 @@ class ElementParser {
      * @throws IOException
      *             In case of an error
      */
-    List<Object> parseObjectTable(File file) throws IOException {
+    public List<BPListElement<?>> parseObjectTable(File file) throws IOException {
         RandomAccessFile raf = null;
         try {
             raf = new RandomAccessFile(file, "r");
@@ -62,7 +44,7 @@ class ElementParser {
      * @throws IOException
      *             In case of an error
      */
-    private List<Object> parseObjectTable(RandomAccessFile raf) throws IOException {
+    private List<BPListElement<?>> parseObjectTable(RandomAccessFile raf) throws IOException {
 
         // Parse the HEADER
         // ----------------
@@ -121,8 +103,8 @@ class ElementParser {
      * <li>1111 xxxx // unused</li>
      * </ul>
      */
-    private List<Object> parseObjectTable(DataInputStream in, int refCount) throws IOException {
-        List<Object> objectTable = new LinkedList<Object>();
+    private List<BPListElement<?>> parseObjectTable(DataInputStream in, int refCount) throws IOException {
+        List<BPListElement<?>> objectTable = new LinkedList<BPListElement<?>>();
         int marker;
         while ((marker = in.read()) != -1) {
             // System.err.println("parseObjectTable marker=" +
@@ -271,16 +253,16 @@ class ElementParser {
      * null 0000 0000 bool 0000 1000 // false bool 0000 1001 // true fill 0000
      * 1111 // fill byte
      */
-    private void parseBoolean(int primitive, List<Object> objectTable) throws IOException {
+    private void parseBoolean(int primitive, List<BPListElement<?>> objectTable) throws IOException {
         switch (primitive) {
             case 0:
                 objectTable.add(null);
                 break;
             case 8:
-                objectTable.add(Boolean.FALSE);
+                objectTable.add(BPListBoolean.FALSE);
                 break;
             case 9:
-                objectTable.add(Boolean.TRUE);
+                objectTable.add(BPListBoolean.TRUE);
                 break;
             case 15:
                 // fill byte: don't add to object table
@@ -294,7 +276,7 @@ class ElementParser {
      * array 1010 nnnn [int] objref* // nnnn is count, unless '1111', then int
      * count follows
      */
-    private void parseByteArray(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseByteArray(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         BPLArray arr = new BPLArray(objectTable, new int[count]);
 
         for (int i = 0; i < count; i++) {
@@ -311,7 +293,7 @@ class ElementParser {
      * array 1010 nnnn [int] objref* // nnnn is count, unless '1111', then int
      * count follows
      */
-    private void parseShortArray(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseShortArray(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         BPLArray arr = new BPLArray(objectTable, new int[count]);
 
         for (int i = 0; i < count; i++) {
@@ -329,16 +311,16 @@ class ElementParser {
      * count follows, followed by bytes
      */
 
-    private void parseData(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseData(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         byte[] data = new byte[count];
         in.readFully(data);
-        objectTable.add(data);
+        objectTable.add(new BPListData(data));
     }
 
     /**
      * byte dict 1101 nnnn keyref* objref* // nnnn is less than '1111'
      */
-    private void parseByteDict(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseByteDict(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         BPLDict dict = new BPLDict(objectTable, new int[count], new int[count]);
 
         for (int i = 0; i < count; i++) {
@@ -353,7 +335,7 @@ class ElementParser {
     /**
      * short dict 1101 ffff int keyref* objref* // int is count
      */
-    private void parseShortDict(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseShortDict(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         BPLDict dict = new BPLDict(objectTable, new int[count], new int[count]);
 
         for (int i = 0; i < count; i++) {
@@ -369,14 +351,13 @@ class ElementParser {
      * string 0101 nnnn [int] ... // ASCII string, nnnn is # of chars, else 1111
      * then int count, then bytes
      */
-    private void parseAsciiString(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseAsciiString(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         byte[] buf = new byte[count];
         in.readFully(buf);
-        String str = new String(buf, "ASCII");
-        objectTable.add(str);
+        objectTable.add(new BPListString(buf));
     }
 
-    private void parseUID(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseUID(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         if (count > 4) {
             throw new IOException("parseUID: unsupported byte count: " + count);
         }
@@ -388,7 +369,7 @@ class ElementParser {
     /**
      * int 0001 nnnn ... // # of bytes is 2^nnnn, big-endian bytes
      */
-    private void parseInt(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseInt(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         if (count > 8) {
             throw new IOException("parseInt: unsupported byte count: " + count);
         }
@@ -400,19 +381,19 @@ class ElementParser {
             }
             value = (value << 8) | b;
         }
-        objectTable.add(value);
+        objectTable.add(new BPListLong(value));
     }
 
     /**
      * real 0010 nnnn ... // # of bytes is 2^nnnn, big-endian bytes
      */
-    private void parseReal(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseReal(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         switch (count) {
             case 4:
-                objectTable.add(new Float(in.readFloat()));
+                objectTable.add(new BPListFloat(in.readFloat()));
                 break;
             case 8:
-                objectTable.add(new Double(in.readDouble()));
+                objectTable.add(new BPListDouble(in.readDouble()));
                 break;
             default:
                 throw new IOException("parseReal: unsupported byte count:" + count);
@@ -430,33 +411,20 @@ class ElementParser {
     /**
      * date 0011 0011 ... // 8 byte float follows, big-endian bytes
      */
-    private void parseDate(DataInputStream in, List<Object> objectTable) throws IOException {
-        objectTable.add(fromTimerInterval(in.readDouble()));
+    private void parseDate(DataInputStream in, List<BPListElement<?>> objectTable) throws IOException {
+        objectTable.add(new BPListDate(in.readDouble()));
     }
 
     /**
      * string 0110 nnnn [int] ... // Unicode string, nnnn is # of chars, else
      * 1111 then int count, then big-endian 2-byte shorts
      */
-    private void parseUnicodeString(DataInputStream in, int count, List<Object> objectTable) throws IOException {
+    private void parseUnicodeString(DataInputStream in, int count, List<BPListElement<?>> objectTable) throws IOException {
         char[] buf = new char[count];
         for (int i = 0; i < count; i++) {
             buf[i] = in.readChar();
         }
-        String str = new String(buf);
-        objectTable.add(str);
+        objectTable.add(new BPListString(buf));
     }
 
-    /**
-     * Timer interval based dates are measured in seconds from 1/1/2001. Timer
-     * intervals have no time zone.
-     */
-    private static XMLGregorianCalendar fromTimerInterval(double timerInterval) {
-        GregorianCalendar gc = new GregorianCalendar();
-        gc.setTime(new Date(TIMER_INTERVAL_TIMEBASE + ((long) timerInterval * 1000L)));
-        XMLGregorianCalendar xmlgc = DATATYPE_FACTORY.newXMLGregorianCalendar(gc);
-        xmlgc.setFractionalSecond(null);
-        xmlgc.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
-        return xmlgc;
-    }
 }

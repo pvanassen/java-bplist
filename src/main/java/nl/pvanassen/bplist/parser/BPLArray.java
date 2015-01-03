@@ -1,29 +1,41 @@
-package nl.pvanassen.bplist.parser.objects;
+package nl.pvanassen.bplist.parser;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Holder for a binary PList array element.
  */
-public class BPLArray {
+public class BPLArray implements BPListElement<List<BPListElement<?>>> {
 
-    private final List<Object> objectTable;
+    private final List<BPListElement<?>> objectTable;
     private final int[] objref;
 
-    public BPLArray(List<Object> objectTable, int[] objref) {
+    BPLArray(List<BPListElement<?>> objectTable, int[] objref) {
         super();
         this.objectTable = objectTable;
         this.objref = objref;
     }
 
-    public Object getValue(int i) {
+    public BPListElement<?> getValue(int i) {
         return objectTable.get(objref[i]);
     }
 
     public int[] getObjref() {
-        int[] returnValue = new int[objref.length];
-        System.arraycopy(objref, 0, returnValue, 0, objref.length);
-        return returnValue;
+        return objref;
+    }
+    
+    @Override
+    public BPListType getType() {
+        return BPListType.ARRAY;
+    }
+    
+    @Override
+    public List<BPListElement<?>> getValue() {
+        List<BPListElement<?>> array = new ArrayList<BPListElement<?>>(objref.length);
+        for (int objr : objref) {
+            array.add(objectTable.get(objr));
+        }
+        return array;
     }
 
     @Override

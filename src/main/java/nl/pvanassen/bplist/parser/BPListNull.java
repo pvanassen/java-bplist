@@ -1,4 +1,4 @@
-package nl.pvanassen.bplist.parser.objects;
+package nl.pvanassen.bplist.parser;
 
 public class BPListNull implements BPListElement<Object> {
     public BPListType getType() {

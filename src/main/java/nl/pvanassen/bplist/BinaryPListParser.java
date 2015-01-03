@@ -13,11 +13,11 @@ package nl.pvanassen.bplist;
 import java.io.*;
 import java.util.*;
 
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.datatype.*;
 
 import nl.pvanassen.bplist.ext.base64.Base64;
 import nl.pvanassen.bplist.ext.nanoxml.XMLElement;
-import nl.pvanassen.bplist.parser.objects.*;
+import nl.pvanassen.bplist.parser.*;
 
 /**
  * Reads a binary PList file and returns it as a NanoXML XMLElement.
@@ -106,6 +106,17 @@ import nl.pvanassen.bplist.parser.objects.*;
 public class BinaryPListParser {
     private ElementParser parser = new ElementParser();
 
+    /** Factory for generating XML data types. */
+    private final static DatatypeFactory DATATYPE_FACTORY;
+
+    static {
+        try {
+            DATATYPE_FACTORY = DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException ex) {
+            throw new RuntimeException("Can't create XML datatype factory.", ex);
+        }
+    }
+    
     /**
      * Parses a binary PList file and turns it into a XMLElement. The XMLElement
      * is equivalent with a XML PList file parsed using NanoXML.
@@ -115,24 +126,19 @@ public class BinaryPListParser {
      * @return Returns the parsed XMLElement.
      * @throws IOException If the file is not found
      */
-    public XMLElement parse(File file) throws IOException {
-
-        // Parse the OBJECT TABLE
-        // ----------------------
-        List<Object> objectTable = parser.parseObjectTable(file);
-
+    public XMLElement parseToXml(List<BPListElement<?>> list) throws IOException {
         // Convert the object table to XML and return it
         XMLElement root = new XMLElement(new HashMap<String, char[]>(), false, false);
         root.setName("plist");
         root.setAttribute("version", "1.0");
-        convertObjectTableToXML(root, objectTable.get(0));
+        convertObjectTableToXML(root, list.get(0));
         return root;
     }
-
+    
     /**
      * Converts the object table in the binary PList into an XMLElement.
      */
-    private void convertObjectTableToXML(XMLElement parent, Object object) {
+    private void convertObjectTableToXML(XMLElement parent, BPListElement<?> object) {
         XMLElement elem = parent.createAnotherElement();
         if (object instanceof BPLDict) {
             BPLDict dict = (BPLDict) object;
@@ -151,30 +157,27 @@ public class BinaryPListParser {
                 convertObjectTableToXML(elem, arr.getValue(i));
             }
 
-        } else if (object instanceof String) {
+        } else if (object instanceof BPListString) {
             elem.setName("string");
-            elem.setContent((String) object);
-        } else if (object instanceof Integer) {
+            elem.setContent(object.getValue().toString());
+        } else if (object instanceof BPListLong) {
             elem.setName("integer");
-            elem.setContent(object.toString());
-        } else if (object instanceof Long) {
-            elem.setName("integer");
-            elem.setContent(object.toString());
-        } else if (object instanceof Float) {
+            elem.setContent(object.getValue().toString());
+        } else if (object instanceof BPListFloat) {
             elem.setName("real");
-            elem.setContent(object.toString());
-        } else if (object instanceof Double) {
+            elem.setContent(object.getValue().toString());
+        } else if (object instanceof BPListDouble) {
             elem.setName("real");
-            elem.setContent(object.toString());
-        } else if (object instanceof Boolean) {
+            elem.setContent(object.getValue().toString());
+        } else if (object instanceof BPListBoolean) {
             elem.setName("boolean");
-            elem.setContent(object.toString());
-        } else if (object instanceof byte[]) {
+            elem.setContent(object.getValue().toString());
+        } else if (object instanceof BPListData) {
             elem.setName("data");
-            elem.setContent(Base64.encodeBytes((byte[]) object, Base64.DONT_BREAK_LINES));
-        } else if (object instanceof XMLGregorianCalendar) {
+            elem.setContent(Base64.encodeBytes(((BPListData)object).getValue(), Base64.DONT_BREAK_LINES));
+        } else if (object instanceof BPListDate) {
             elem.setName("date");
-            elem.setContent(((XMLGregorianCalendar) object).toXMLFormat() + "Z");
+            elem.setContent(fromDate(((BPListDate)object).getValue()).toXMLFormat() + "Z");
         } else if (object instanceof BPLUid) {
             elem.setName("UID");
             elem.setContent(Integer.toString(((BPLUid) object).getNumber()));
@@ -185,4 +188,13 @@ public class BinaryPListParser {
         parent.addChild(elem);
     }
 
+
+    private static XMLGregorianCalendar fromDate(Date date) {
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(date);
+        XMLGregorianCalendar xmlgc = DATATYPE_FACTORY.newXMLGregorianCalendar(gc);
+        xmlgc.setFractionalSecond(null);
+        xmlgc.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+        return xmlgc;
+    }
 }
