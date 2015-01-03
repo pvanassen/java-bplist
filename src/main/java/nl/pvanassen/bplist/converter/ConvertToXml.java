@@ -206,7 +206,7 @@ public class ConvertToXml {
 
 
     private static XMLGregorianCalendar fromDate(Date date) {
-        GregorianCalendar gc = new GregorianCalendar();
+        GregorianCalendar gc = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
         gc.setTime(date);
         XMLGregorianCalendar xmlgc = DATATYPE_FACTORY.newXMLGregorianCalendar(gc);
         xmlgc.setFractionalSecond(null);
