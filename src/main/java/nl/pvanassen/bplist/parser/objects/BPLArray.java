@@ -7,8 +7,8 @@ import java.util.List;
  */
 public class BPLArray {
 
-    private List<Object> objectTable;
-    private int[] objref;
+    private final List<Object> objectTable;
+    private final int[] objref;
 
     public BPLArray(List<Object> objectTable, int[] objref) {
         super();

@@ -7,9 +7,9 @@ import java.util.List;
  */
 public class BPLDict {
 
-    private List<Object> objectTable;
-    private int[] keyref;
-    private int[] objref;
+    private final List<Object> objectTable;
+    private final int[] keyref;
+    private final int[] objref;
 
     public BPLDict(List<Object> objectTable, int[] keyref, int[] objref) {
         super();
