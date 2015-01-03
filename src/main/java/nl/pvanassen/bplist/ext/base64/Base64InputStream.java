@@ -1,5 +1,7 @@
 package nl.pvanassen.bplist.ext.base64;
 
+import java.io.FilterInputStream;
+
 /* ******** I N N E R C L A S S I N P U T S T R E A M ******** */
 /**
  * A {@link Base64InputStream} will read data from another <tt>java.io.InputStream</tt>, given in the constructor, and encode/decode
@@ -8,7 +10,7 @@ package nl.pvanassen.bplist.ext.base64;
  * @see Base64
  * @since 1.3
  */
-public class Base64InputStream extends java.io.FilterInputStream {
+class Base64InputStream extends FilterInputStream {
 
     private boolean encode; // Encoding or decoding
     private int position; // Current position in the buffer
@@ -17,17 +19,6 @@ public class Base64InputStream extends java.io.FilterInputStream {
     private int numSigBytes; // Number of meaningful bytes in the buffer
     private int lineLength;
     private boolean breakLines; // Break lines at less than 80 characters
-
-    /**
-     * Constructs a {@link Base64InputStream} in DECODE mode.
-     * 
-     * @param in
-     *            the <tt>java.io.InputStream</tt> from which to read data.
-     * @since 1.3
-     */
-    public Base64InputStream(java.io.InputStream in) {
-        this(in, Base64.DECODE);
-    } // end constructor
 
     /**
      * Constructs a {@link Base64InputStream} in either ENCODE or DECODE
@@ -53,7 +44,7 @@ public class Base64InputStream extends java.io.FilterInputStream {
      * @see Base64#DONT_BREAK_LINES
      * @since 2.0
      */
-    public Base64InputStream(java.io.InputStream in, int options) {
+    Base64InputStream(java.io.InputStream in, int options) {
         super(in);
         breakLines = (options & Base64.DONT_BREAK_LINES) != Base64.DONT_BREAK_LINES;
         encode = (options & Base64.ENCODE) == Base64.ENCODE;
