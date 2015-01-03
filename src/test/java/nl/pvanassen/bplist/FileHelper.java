@@ -5,10 +5,13 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 
+import org.apache.commons.io.IOUtils;
+
 class FileHelper {
     private FileHelper() {
-        
+
     }
+
     /**
      * Get a random access file, one way or the other. If the url resolves to a file, use this. Otherwise create a copy in temp and use that
      * 
@@ -50,6 +53,14 @@ class FileHelper {
             return file;
         } catch (IOException e) {
             throw new RuntimeException("Error getting RAF", e);
+        }
+    }
+
+    static String getContent(String resource) throws IOException {
+        try (InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+                ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            IOUtils.copy(input, output);
+            return new String(output.toByteArray());
         }
     }
 }
