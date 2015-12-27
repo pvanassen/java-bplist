@@ -37,16 +37,15 @@ import java.util.*;
 /**
  * XMLElement is a representation of an XML object. The object is able to parse
  * XML code.
- * <P>
  * <DL>
  * <DT><B>Parsing XML Data</B></DT>
  * <DD>You can parse XML data using the following code:
  * <UL>
- * <CODE>
+ * <li><CODE>
  * XMLElement xml = new XMLElement();<BR>
  * FileReader reader = new FileReader("filename.xml");<BR>
  * xml.parseFromReader(reader);
- * </CODE>
+ * </CODE></li>
  * </UL>
  * </DD>
  * </DL>
@@ -55,7 +54,7 @@ import java.util.*;
  * <DD>You can enumerate the attributes of an element using the method {@link #enumerateAttributeNames() enumerateAttributeNames}. The attribute values can be retrieved using the
  * method {@link #getStringAttribute(java.lang.String) getStringAttribute}. The following example shows how to list the attributes of an element:
  * <UL>
- * <CODE>
+ * <li><CODE>
  * XMLElement element = ...;<BR>
  * Iterator iter = element.getAttributeNames();<BR>
  * while (iter.hasNext()) {<BR>
@@ -63,7 +62,7 @@ import java.util.*;
  * &nbsp;&nbsp;&nbsp;&nbsp;String value = element.getStringAttribute(key);<BR>
  * &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(key + " = " + value);<BR>
  * }
- * </CODE>
+ * </CODE></li>
  * </UL>
  * </DD>
  * </DL>
@@ -76,9 +75,9 @@ import java.util.*;
  * <DT><B>Elements Containing Character Data</B></DT>
  * <DD>If an iterator contains character data, like in the following example:
  * <UL>
- * <CODE>
+ * <li><CODE>
  * &lt;title&gt;The Title&lt;/title&gt;
- * </CODE>
+ * </CODE></li>
  * </UL>
  * you can retrieve that data using the method {@link #getContent() getContent}.</DD>
  * </DL>
@@ -86,13 +85,11 @@ import java.util.*;
  * <DT><B>Subclassing XMLElement</B></DT>
  * <DD>When subclassing XMLElement, you need to override the method {@link #createAnotherElement() createAnotherElement} which has to return a new copy of the receiver.</DD>
  * </DL>
- * <P>
  *
- * @see XMLParseException
- * @author Marc De Scheemaecker &lt;<A
- *         href="mailto:cyberelf@mac.com">cyberelf@mac.com</A>&gt;
+ * @author Marc De Scheemaecker <A href="mailto:cyberelf@mac.com">cyberelf@mac.com</A>
  * @version 2005-06-18 Werner Randelshofer: Adapted for Java 2 Collections API. <br>
  *          $Name: RELEASE_2_2_1 $, $Revision: 1.4 $
+ * @see XMLParseException
  */
 public class XMLElement {
 
@@ -260,28 +257,28 @@ public class XMLElement {
      * Creates and initializes a new XML element. Calling the construction is
      * equivalent to:
      * <ul>
-     * <code>new XMLElement(new HashMap(), false, true)
-     * </code>
+     * <li><code>new XMLElement(new HashMap(), false, true)
+     * </code></li>
      * </ul>
      * <dl>
      * <dt><b>Postconditions:</b></dt>
      * <dd>
      * <ul>
-     * <li>countChildren() => 0
-     * <li>iterateChildren() => empty enumeration
-     * <li>enumeratePropertyNames() => empty enumeration
-     * <li>getChildren() => empty vector
-     * <li>getContent() => ""
-     * <li>getLineNr() => 0
-     * <li>getName() => null
+     * <li>countChildren() =&gt; 0
+     * <li>iterateChildren() =&gt; empty enumeration
+     * <li>enumeratePropertyNames() =&gt; empty enumeration
+     * <li>getChildren() =&gt; empty vector
+     * <li>getContent() =&gt; ""
+     * <li>getLineNr() =&gt; 0
+     * <li>getName() =&gt; null
      * </ul>
      * </dd>
      * </dl>
      *
-     * @see XMLElement#XMLElement(java.util.HashMap) XMLElement(HashMap)
+     * @see XMLElement#XMLElement(java.util.Map) XMLElement(HashMap)
      * @see XMLElement#XMLElement(boolean)
-     * @see XMLElement#XMLElement(java.util.HashMap,boolean) XMLElement(HashMap,
-     *      boolean)
+     * @see XMLElement#XMLElement(java.util.Map, boolean) XMLElement(HashMap,
+     * boolean)
      */
     public XMLElement() {
         this(new HashMap<String, char[]>(), false, true, true);
@@ -291,40 +288,37 @@ public class XMLElement {
      * Creates and initializes a new XML element. Calling the construction is
      * equivalent to:
      * <ul>
-     * <code>new XMLElement(entities, false, true)
-     * </code>
+     * <li><code>new XMLElement(entities, false, true)
+     * </code></li>
      * </ul>
      *
-     * @param entities
-     *            The entity conversion table.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>entities != null</code>
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>countChildren() => 0
-     *            <li>iterateChildren() => empty enumeration
-     *            <li>enumeratePropertyNames() => empty enumeration
-     *            <li>getChildren() => empty vector
-     *            <li>getContent() => ""
-     *            <li>getLineNr() => 0
-     *            <li>getName() => null
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param entities The entity conversion table.
+     *                 <dl>
+     *                 <dt><b>Preconditions:</b></dt>
+     *                 <dd>
+     *                 <ul>
+     *                 <li><code>entities != null</code>
+     *                 </ul>
+     *                 </dd>
+     *                 </dl>
+     *                 <dl>
+     *                 <dt><b>Postconditions:</b></dt>
+     *                 <dd>
+     *                 <ul>
+     *                 <li>countChildren() =&gt; 0</li>
+     *                 <li>iterateChildren() =&gt; empty enumeration</li>
+     *                 <li>enumeratePropertyNames() =&gt; empty enumeration</li>
+     *                 <li>getChildren() =&gt; empty vector</li>
+     *                 <li>getContent() =&gt; ""</li>
+     *                 <li>getLineNr() =&gt; 0</li>
+     *                 <li>getName() =&gt; null</li>
+     *                 </ul>
+     *                 </dd>
+     *                 </dl>
      * @see XMLElement#XMLElement()
      * @see XMLElement#XMLElement(boolean)
-     * @see XMLElement#XMLElement(java.util.HashMap,boolean) XMLElement(HashMap,
-     *      boolean)
+     * @see XMLElement#XMLElement(java.util.Map, boolean) XMLElement(HashMap,
+     * boolean)
      */
     public XMLElement(Map<String, char[]> entities) {
         this(entities, false, true, true);
@@ -334,33 +328,30 @@ public class XMLElement {
      * Creates and initializes a new XML element. Calling the construction is
      * equivalent to:
      * <ul>
-     * <code>new XMLElement(new HashMap(), skipLeadingWhitespace, true)
-     * </code>
+     * <li><code>new XMLElement(new HashMap(), skipLeadingWhitespace, true)
+     * </code></li>
      * </ul>
      *
-     * @param skipLeadingWhitespace
-     *            <code>true</code> if leading and trailing whitespace in PCDATA
-     *            content has to be removed.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>countChildren() => 0
-     *            <li>iterateChildren() => empty enumeration
-     *            <li>enumeratePropertyNames() => empty enumeration
-     *            <li>getChildren() => empty vector
-     *            <li>getContent() => ""
-     *            <li>getLineNr() => 0
-     *            <li>getName() => null
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param skipLeadingWhitespace <code>true</code> if leading and trailing whitespace in PCDATA
+     *                              content has to be removed.
+     *                              <dl>
+     *                              <dt><b>Postconditions:</b></dt>
+     *                              <dd>
+     *                              <ul>
+     *                              <li>countChildren() =&gt; 0
+     *                              <li>iterateChildren() =&gt; empty enumeration
+     *                              <li>enumeratePropertyNames() =&gt; empty enumeration
+     *                              <li>getChildren() =&gt; empty vector
+     *                              <li>getContent() =&gt; ""
+     *                              <li>getLineNr() =&gt; 0
+     *                              <li>getName() =&gt; null
+     *                              </ul>
+     *                              </dd>
+     *                              </dl>
      * @see XMLElement#XMLElement()
-     * @see XMLElement#XMLElement(java.util.HashMap) XMLElement(HashMap)
-     * @see XMLElement#XMLElement(java.util.HashMap,boolean) XMLElement(HashMap,
-     *      boolean)
+     * @see XMLElement#XMLElement(java.util.Map) XMLElement(HashMap)
+     * @see XMLElement#XMLElement(java.util.Map, boolean) XMLElement(HashMap,
+     * boolean)
      */
     public XMLElement(boolean skipLeadingWhitespace) {
         this(new HashMap<String, char[]>(), skipLeadingWhitespace, true, true);
@@ -370,42 +361,33 @@ public class XMLElement {
      * Creates and initializes a new XML element. Calling the construction is
      * equivalent to:
      * <ul>
-     * <code>new XMLElement(entities, skipLeadingWhitespace, true)
-     * </code>
+     * <li><code>new XMLElement(entities, skipLeadingWhitespace, true)</code></li>
      * </ul>
      *
-     * @param entities
-     *            The entity conversion table.
-     * @param skipLeadingWhitespace
-     *            <code>true</code> if leading and trailing whitespace in PCDATA
-     *            content has to be removed.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>entities != null</code>
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>countChildren() => 0
-     *            <li>iterateChildren() => empty enumeration
-     *            <li>enumeratePropertyNames() => empty enumeration
-     *            <li>getChildren() => empty vector
-     *            <li>getContent() => ""
-     *            <li>getLineNr() => 0
-     *            <li>getName() => null
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param entities              The entity conversion table.
+     * @param skipLeadingWhitespace <code>true</code> if leading and trailing whitespace in PCDATA
+     *                              content has to be removed.
+     *                              <dl>
+     *                              <dt><b>Preconditions:</b></dt>
+     *                              </dl>
+     *                              <ul>
+     *                              <li><code>entities != null</code>
+     *                              </ul>
+     *                              <dl>
+     *                              <dt><b>Postconditions:</b></dt>
+     *                              </dl>
+     *                              <ul>
+     *                              <li>countChildren() =&gt; 0
+     *                              <li>iterateChildren() =&gt; empty enumeration
+     *                              <li>enumeratePropertyNames() =&gt; empty enumeration
+     *                              <li>getChildren() =&gt; empty vector
+     *                              <li>getContent() =&gt; ""
+     *                              <li>getLineNr() =&gt; 0
+     *                              <li>getName() =&gt; null
+     *                              </ul>
      * @see XMLElement#XMLElement()
      * @see XMLElement#XMLElement(boolean)
-     * @see XMLElement#XMLElement(java.util.HashMap) XMLElement(HashMap)
+     * @see XMLElement#XMLElement(java.util.Map) XMLElement(HashMap)
      */
     public XMLElement(Map<String, char[]> entities, boolean skipLeadingWhitespace) {
         this(entities, skipLeadingWhitespace, true, true);
@@ -414,43 +396,34 @@ public class XMLElement {
     /**
      * Creates and initializes a new XML element.
      *
-     * @param entities
-     *            The entity conversion table.
-     * @param skipLeadingWhitespace
-     *            <code>true</code> if leading and trailing whitespace in PCDATA
-     *            content has to be removed.
-     * @param ignoreCase
-     *            <code>true</code> if the case of element and attribute names
-     *            have to be ignored.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>entities != null</code>
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>countChildren() => 0
-     *            <li>iterateChildren() => empty enumeration
-     *            <li>enumeratePropertyNames() => empty enumeration
-     *            <li>getChildren() => empty vector
-     *            <li>getContent() => ""
-     *            <li>getLineNr() => 0
-     *            <li>getName() => null
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param entities              The entity conversion table.
+     * @param skipLeadingWhitespace <code>true</code> if leading and trailing whitespace in PCDATA
+     *                              content has to be removed.
+     * @param ignoreCase            <code>true</code> if the case of element and attribute names
+     *                              have to be ignored.
+     *                              <dl>
+     *                              <dt><b>Preconditions:</b></dt>
+     *                              </dl>
+     *                              <ul>
+     *                              <li><code>entities != null</code></li>
+     *                              </ul>
+     *                              <dl>
+     *                              <dt><b>Postconditions:</b></dt>
+     *                              </dl>
+     *                              <ul>
+     *                              <li>countChildren() =&gt; 0</li>
+     *                              <li>iterateChildren() =&gt; empty enumeration</li>
+     *                              <li>enumeratePropertyNames() =&gt; empty enumeration</li>
+     *                              <li>getChildren() =&gt; empty vector</li>
+     *                              <li>getContent() =&gt; ""</li>
+     *                              <li>getLineNr() =&gt; 0</li>
+     *                              <li>getName() =&gt; null</li>
+     *                              </ul>
      * @see XMLElement#XMLElement()
      * @see XMLElement#XMLElement(boolean)
-     * @see XMLElement#XMLElement(java.util.HashMap) XMLElement(HashMap)
-     * @see XMLElement#XMLElement(java.util.HashMap,boolean) XMLElement(HashMap,
-     *      boolean)
+     * @see XMLElement#XMLElement(java.util.Map) XMLElement(HashMap)
+     * @see XMLElement#XMLElement(java.util.Map, boolean) XMLElement(HashMap,
+     * boolean)
      */
     public XMLElement(Map<String, char[]> entities, boolean skipLeadingWhitespace, boolean ignoreCase) {
         this(entities, skipLeadingWhitespace, true, ignoreCase);
@@ -458,38 +431,36 @@ public class XMLElement {
 
     /**
      * Creates and initializes a new XML element.
-     * <P>
+     * 
      * This constructor should <I>only</I> be called from {@link #createAnotherElement() createAnotherElement} to create child iterator.
      *
-     * @param entities
-     *            The entity conversion table.
-     * @param skipLeadingWhitespace
-     *            <code>true</code> if leading and trailing whitespace in PCDATA
-     *            content has to be removed.
-     * @param fillBasicConversionTable
-     *            <code>true</code> if the basic entities need to be added to
-     *            the entity list.
-     * @param ignoreCase
-     *            <code>true</code> if the case of element and attribute names
-     *            have to be ignored.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt><dd>
-     *            <ul>
-     *            <li><code>entities != null</code> <li>if <code> fillBasicConversionTable == false</code> then <code>entities </code> contains at least the following entries:
-     *            <code>amp </code>, <code>lt</code>, <code>gt</code>, <code>apos</code> and <code>quot</code>
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt><dd>
-     *            <ul>
-     *            <li>countChildren() => 0 <li>iterateChildren() => empty enumeration <li>enumeratePropertyNames() => empty enumeration <li>getChildren() => empty vector <li>
-     *            getContent() => "" <li> getLineNr() => 0 <li>getName() => null
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param entities                 The entity conversion table.
+     * @param skipLeadingWhitespace    <code>true</code> if leading and trailing whitespace in PCDATA
+     *                                 content has to be removed.
+     * @param fillBasicConversionTable <code>true</code> if the basic entities need to be added to
+     *                                 the entity list.
+     * @param ignoreCase               <code>true</code> if the case of element and attribute names
+     *                                 have to be ignored.
+     *                                 <dl>
+     *                                 <dt><b>Preconditions:</b></dt>
+     *                                 </dl>
+     *                                 <ul>
+     *                                 <li><code>entities != null</code> </li>
+     *                                 <li>if <code> fillBasicConversionTable == false</code> then <code>entities </code> contains at least the following entries:
+     *                                 <code>amp </code>, <code>lt</code>, <code>gt</code>, <code>apos</code> and <code>quot</code></li>
+     *                                 </ul>
+     *                                 <dl>
+     *                                 <dt><b>Postconditions:</b></dt>
+     *                                 </dl>
+     *                                 <ul>
+     *                                 <li>countChildren() =&gt; 0 </li>
+     *                                 <li>iterateChildren() =&gt; empty enumeration </li>
+     *                                 <li>enumeratePropertyNames() =&gt; empty enumeration </li>
+     *                                 <li>getChildren() =&gt; empty vector</li>
+     *                                 <li>getContent() =&gt; "" </li>
+     *                                 <li> getLineNr() =&gt; 0 </li>
+     *                                 <li>getName() =&gt; null</li>
+     *                                 </ul>
      * @see XMLElement#createAnotherElement()
      */
     protected XMLElement(Map<String, char[]> entities, boolean skipLeadingWhitespace, boolean fillBasicConversionTable, boolean ignoreCase) {
@@ -502,41 +473,34 @@ public class XMLElement {
         this.entities = entities;
         lineNr = 0;
         if (fillBasicConversionTable) {
-            this.entities.put("amp", new char[] { '&' });
-            this.entities.put("quot", new char[] { '"' });
-            this.entities.put("apos", new char[] { '\'' });
-            this.entities.put("lt", new char[] { '<' });
-            this.entities.put("gt", new char[] { '>' });
+            this.entities.put("amp", new char[]{'&'});
+            this.entities.put("quot", new char[]{'"'});
+            this.entities.put("apos", new char[]{'\''});
+            this.entities.put("lt", new char[]{'<'});
+            this.entities.put("gt", new char[]{'>'});
         }
     }
 
     /**
      * Adds a child element.
      *
-     * @param child
-     *            The child element to add.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>child != null</code>
-     *            <li><code>child.getName() != null</code>
-     *            <li><code>child</code> does not have a parent element
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>countChildren() => old.countChildren() + 1
-     *            <li>iterateChildren() => old.iterateChildren() + child
-     *            <li>getChildren() => old.iterateChildren() + child
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param child The child element to add.
+     *              <dl>
+     *              <dt><b>Preconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li><code>child != null</code>
+     *              <li><code>child.getName() != null</code>
+     *              <li><code>child</code> does not have a parent element
+     *              </ul>
+     *              <dl>
+     *              <dt><b>Postconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li>countChildren() =&gt; old.countChildren() + 1
+     *              <li>iterateChildren() =&gt; old.iterateChildren() + child
+     *              <li>getChildren() =&gt; old.iterateChildren() + child
+     *              </ul>
      * @see XMLElement#countChildren()
      * @see XMLElement#iterateChildren()
      * @see XMLElement#getChildren()
@@ -549,47 +513,37 @@ public class XMLElement {
     /**
      * Adds or modifies an attribute.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param value
-     *            The value of the attribute.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            <li><code>value != null</code>
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>enumerateAttributeNames() => old.enumerateAttributeNames() + name
-     *            <li>getAttribute(name) => value
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name  The name of the attribute.
+     * @param value The value of the attribute.
+     *              
+     *              <dl>
+     *              <dt><b>Preconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li><code>name != null</code>
+     *              <li><code>name</code> is a valid XML identifier
+     *              <li><code>value != null</code>
+     *              </ul>
+     *              
+     *              <dl>
+     *              <dt><b>Postconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li>enumerateAttributeNames() =&gt; old.enumerateAttributeNames() + name
+     *              <li>getAttribute(name) =&gt; value
+     *              </ul>
      * @see XMLElement#setDoubleAttribute(java.lang.String, double)
-     *      setDoubleAttribute(String, double)
+     * setDoubleAttribute(String, double)
      * @see XMLElement#setIntAttribute(java.lang.String, int)
-     *      setIntAttribute(String, int)
+     * setIntAttribute(String, int)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getAttribute(java.lang.String) getAttribute(String)
      * @see XMLElement#getAttribute(java.lang.String, java.lang.Object)
-     *      getAttribute(String, Object)
-     * @see XMLElement#getAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getAttribute(String, HashMap, String,
-     *      boolean)
+     * getAttribute(String, Object)
      * @see XMLElement#getStringAttribute(java.lang.String)
-     *      getStringAttribute(String)
+     * getStringAttribute(String)
      * @see XMLElement#getStringAttribute(java.lang.String, java.lang.String)
-     *      getStringAttribute(String, String)
-     * @see XMLElement#getStringAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getStringAttribute(String, HashMap,
-     *      String, boolean)
+     * getStringAttribute(String, String)
      */
     public void setAttribute(String name, Object value) {
         if (ignoreCase) {
@@ -601,41 +555,32 @@ public class XMLElement {
     /**
      * Adds or modifies an attribute.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param value
-     *            The value of the attribute.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>enumerateAttributeNames() => old.enumerateAttributeNames() + name
-     *            <li>getIntAttribute(name) => value
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name  The name of the attribute.
+     * @param value The value of the attribute.
+     *              <dl>
+     *              <dt><b>Preconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li><code>name != null</code>
+     *              <li><code>name</code> is a valid XML identifier
+     *              </ul>
+     *              
+     *              <dl>
+     *              <dt><b>Postconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li>enumerateAttributeNames() =&gt; old.enumerateAttributeNames() + name
+     *              <li>getIntAttribute(name) =&gt; value
+     *              </ul>
      * @see XMLElement#setDoubleAttribute(java.lang.String, double)
-     *      setDoubleAttribute(String, double)
+     * setDoubleAttribute(String, double)
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getIntAttribute(java.lang.String) getIntAttribute(String)
      * @see XMLElement#getIntAttribute(java.lang.String, int)
-     *      getIntAttribute(String, int)
-     * @see XMLElement#getIntAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getIntAttribute(String, HashMap, String,
-     *      boolean)
+     * getIntAttribute(String, int)
      */
     public void setIntAttribute(String name, int value) {
         if (ignoreCase) {
@@ -647,42 +592,33 @@ public class XMLElement {
     /**
      * Adds or modifies an attribute.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param value
-     *            The value of the attribute.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>enumerateAttributeNames() => old.enumerateAttributeNames() + name
-     *            <li>getDoubleAttribute(name) => value
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name  The name of the attribute.
+     * @param value The value of the attribute.
+     *              <dl>
+     *              <dt><b>Preconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li><code>name != null</code>
+     *              <li><code>name</code> is a valid XML identifier
+     *              </ul>
+     *              
+     *              <dl>
+     *              <dt><b>Postconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li>enumerateAttributeNames() =&gt; old.enumerateAttributeNames() + name
+     *              <li>getDoubleAttribute(name) =&gt; value
+     *              </ul>
      * @see XMLElement#setIntAttribute(java.lang.String, int)
-     *      setIntAttribute(String, int)
+     * setIntAttribute(String, int)
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getDoubleAttribute(java.lang.String)
-     *      getDoubleAttribute(String)
+     * getDoubleAttribute(String)
      * @see XMLElement#getDoubleAttribute(java.lang.String, double)
-     *      getDoubleAttribute(String, double)
-     * @see XMLElement#getDoubleAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getDoubleAttribute(String, HashMap,
-     *      String, boolean)
+     * getDoubleAttribute(String, double)
      */
     public void setDoubleAttribute(String name, double value) {
         if (ignoreCase) {
@@ -695,12 +631,10 @@ public class XMLElement {
      * Returns the number of child iterator of the element.
      * <dl>
      * <dt><b>Postconditions:</b></dt>
-     * <dd>
-     * <ul>
-     * <li><code>result >= 0</code>
-     * </ul>
-     * </dd>
      * </dl>
+     * <ul>
+     * <li><code>result =&gt; 0</code>
+     * </ul>
      *
      * @see XMLElement#addChild(XMLElement) addChild(XMLElement)
      * @see XMLElement#iterateChildren()
@@ -715,44 +649,34 @@ public class XMLElement {
      * Enumerates the attribute names.
      * <dl>
      * <dt><b>Postconditions:</b></dt>
-     * <dd>
+     * </dl>
      * <ul>
      * <li><code>result != null</code>
      * </ul>
-     * </dd>
-     * </dl>
      *
      * @see XMLElement#setDoubleAttribute(java.lang.String, double)
-     *      setDoubleAttribute(String, double)
+     * setDoubleAttribute(String, double)
      * @see XMLElement#setIntAttribute(java.lang.String, int)
-     *      setIntAttribute(String, int)
+     * setIntAttribute(String, int)
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#getAttribute(java.lang.String) getAttribute(String)
      * @see XMLElement#getAttribute(java.lang.String, java.lang.Object)
-     *      getAttribute(String, String)
-     * @see XMLElement#getAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getAttribute(String, HashMap, String,
-     *      boolean)
+     * getAttribute(String, String)
      * @see XMLElement#getStringAttribute(java.lang.String)
-     *      getStringAttribute(String)
+     * getStringAttribute(String)
      * @see XMLElement#getStringAttribute(java.lang.String, java.lang.String)
-     *      getStringAttribute(String, String)
-     * @see XMLElement#getStringAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getStringAttribute(String, HashMap,
-     *      String, boolean)
+     * getStringAttribute(String, String)
      * @see XMLElement#getIntAttribute(java.lang.String) getIntAttribute(String)
      * @see XMLElement#getIntAttribute(java.lang.String, int)
-     *      getIntAttribute(String, int)
-     * @see XMLElement#getIntAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getIntAttribute(String, HashMap, String,
-     *      boolean)
+     * getIntAttribute(String, int)
      * @see XMLElement#getDoubleAttribute(java.lang.String)
-     *      getDoubleAttribute(String)
+     * getDoubleAttribute(String)
      * @see XMLElement#getDoubleAttribute(java.lang.String, double)
-     *      getDoubleAttribute(String, double)
-     * @see XMLElement#getDoubleAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getDoubleAttribute(String, HashMap,
-     *      String, boolean)
+     * getDoubleAttribute(String, double)
      * @see XMLElement#getBooleanAttribute(java.lang.String, java.lang.String, java.lang.String, boolean) getBooleanAttribute(String, String,
-     *      String, boolean)
+     * String, boolean)
      */
     public Iterator<String> enumerateAttributeNames() {
         return attributes.keySet().iterator();
@@ -762,12 +686,10 @@ public class XMLElement {
      * Enumerates the child iterator.
      * <dl>
      * <dt><b>Postconditions:</b></dt>
-     * <dd>
+     * </dl>
      * <ul>
      * <li><code>result != null</code>
      * </ul>
-     * </dd>
-     * </dl>
      *
      * @see XMLElement#addChild(XMLElement) addChild(XMLElement)
      * @see XMLElement#countChildren()
@@ -783,12 +705,10 @@ public class XMLElement {
      * ArrayList.
      * <dl>
      * <dt><b>Postconditions:</b></dt>
-     * <dd>
+     * </dl>
      * <ul>
      * <li><code>result != null</code>
      * </ul>
-     * </dd>
-     * </dl>
      *
      * @see XMLElement#addChild(XMLElement) addChild(XMLElement)
      * @see XMLElement#countChildren()
@@ -801,7 +721,7 @@ public class XMLElement {
 
     /**
      * A lookup method to find elements
-     * 
+     *
      * @param name Tag name to look for
      * @return First element matching tag name
      */
@@ -816,7 +736,7 @@ public class XMLElement {
 
     /**
      * A lookup method to find elements
-     * 
+     *
      * @param name Tag name to look for
      * @return All elements matching tag name
      */
@@ -846,7 +766,7 @@ public class XMLElement {
      * <dt><b>Postconditions:</b></dt>
      * <dd>
      * <ul>
-     * <li><code>result >= 0</code>
+     * <li><code>result =&gt; 0</code>
      * </ul>
      * </dd>
      * </dl>
@@ -858,27 +778,22 @@ public class XMLElement {
     /**
      * Returns an attribute of the element. If the attribute doesn't exist, <code>null</code> is returned.
      *
-     * @param name
-     *            The name of the attribute.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name The name of the attribute.
+     *             <dl>
+     *             <dt><b>Preconditions:</b></dt>
+     *             <dd>
+     *             <ul>
+     *             <li><code>name != null</code>
+     *             <li><code>name</code> is a valid XML identifier
+     *             </ul>
+     *             </dd>
+     *             </dl>
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getAttribute(java.lang.String, java.lang.Object)
-     *      getAttribute(String, Object)
-     * @see XMLElement#getAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getAttribute(String, HashMap, String,
-     *      boolean)
+     * getAttribute(String, Object)
      */
     public Object getAttribute(String name) {
         return this.getAttribute(name, null);
@@ -887,28 +802,22 @@ public class XMLElement {
     /**
      * Returns an attribute of the element. If the attribute doesn't exist, <code>defaultValue</code> is returned.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param defaultValue
-     *            Key to use if the attribute is missing.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name         The name of the attribute.
+     * @param defaultValue Key to use if the attribute is missing.
+     *                     <dl>
+     *                     <dt><b>Preconditions:</b></dt>
+     *                     <dd>
+     *                     <ul>
+     *                     <li><code>name != null</code>
+     *                     <li><code>name</code> is a valid XML identifier
+     *                     </ul>
+     *                     </dd>
+     *                     </dl>
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getAttribute(java.lang.String) getAttribute(String)
-     * @see XMLElement#getAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getAttribute(String, HashMap, String,
-     *      boolean)
      */
     public Object getAttribute(String name, Object defaultValue) {
         if (ignoreCase) {
@@ -924,35 +833,29 @@ public class XMLElement {
     /**
      * Returns an attribute by looking up a key in a hashtable. If the attribute
      * doesn't exist, the value corresponding to defaultKey is returned.
-     * <P>
-     * As an example, if valueSet contains the mapping <code>"one" =>
+     * 
+     * As an example, if valueSet contains the mapping <code>"one" =&gt;
      * "1"</code> and the element contains the attribute <code>attr="one"</code> , then <code>getAttribute("attr", mapping, defaultKey, false)</code> returns <code>"1"</code>.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param valueSet
-     *            HashMap mapping keySet().iterator to values.
-     * @param defaultKey
-     *            Key to use if the attribute is missing.
-     * @param allowLiterals
-     *            <code>true</code> if literals are valid.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt><dd>
-     *            <ul>
-     *            <li><code>name != null</code> <li><code>name</code> is a valid XML identifier <li><code>valueSet</code> != null <li>the keySet().iterator of <code>valueSet</code>
-     *            are strings
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name          The name of the attribute.
+     * @param valueSet      HashMap mapping keySet().iterator to values.
+     * @param defaultKey    Key to use if the attribute is missing.
+     * @param allowLiterals <code>true</code> if literals are valid.
+     *                      <dl>
+     *                      <dt><b>Preconditions:</b></dt><dd>
+     *                      <ul>
+     *                      <li><code>name != null</code> <li><code>name</code> is a valid XML identifier <li><code>valueSet</code> != null <li>the keySet().iterator of <code>valueSet</code>
+     *                      are strings
+     *                      </ul>
+     *                      </dd>
+     *                      </dl>
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getAttribute(java.lang.String) getAttribute(String)
      * @see XMLElement#getAttribute(java.lang.String, java.lang.Object)
-     *      getAttribute(String, Object)
+     * getAttribute(String, Object)
      */
     public Object getAttribute(String name, Map<String, Object> valueSet, String defaultKey, boolean allowLiterals) {
         if (ignoreCase) {
@@ -977,27 +880,22 @@ public class XMLElement {
     /**
      * Returns an attribute of the element. If the attribute doesn't exist, <code>null</code> is returned.
      *
-     * @param name
-     *            The name of the attribute.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name The name of the attribute.
+     *             <dl>
+     *             <dt><b>Preconditions:</b></dt>
+     *             <dd>
+     *             <ul>
+     *             <li><code>name != null</code>
+     *             <li><code>name</code> is a valid XML identifier
+     *             </ul>
+     *             </dd>
+     *             </dl>
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getStringAttribute(java.lang.String, java.lang.String)
-     *      getStringAttribute(String, String)
-     * @see XMLElement#getStringAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getStringAttribute(String, HashMap,
-     *      String, boolean)
+     * getStringAttribute(String, String)
      */
     public String getStringAttribute(String name) {
         return this.getStringAttribute(name, null);
@@ -1006,29 +904,23 @@ public class XMLElement {
     /**
      * Returns an attribute of the element. If the attribute doesn't exist, <code>defaultValue</code> is returned.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param defaultValue
-     *            Key to use if the attribute is missing.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name         The name of the attribute.
+     * @param defaultValue Key to use if the attribute is missing.
+     *                     <dl>
+     *                     <dt><b>Preconditions:</b></dt>
+     *                     <dd>
+     *                     <ul>
+     *                     <li><code>name != null</code>
+     *                     <li><code>name</code> is a valid XML identifier
+     *                     </ul>
+     *                     </dd>
+     *                     </dl>
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getStringAttribute(java.lang.String)
-     *      getStringAttribute(String)
-     * @see XMLElement#getStringAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getStringAttribute(String, HashMap,
-     *      String, boolean)
+     * getStringAttribute(String)
      */
     public String getStringAttribute(String name, String defaultValue) {
         return (String) this.getAttribute(name, defaultValue);
@@ -1037,36 +929,30 @@ public class XMLElement {
     /**
      * Returns an attribute by looking up a key in a hashtable. If the attribute
      * doesn't exist, the value corresponding to defaultKey is returned.
-     * <P>
-     * As an example, if valueSet contains the mapping <code>"one" =>
+     * 
+     * As an example, if valueSet contains the mapping <code>"one" =&gt;
      * "1"</code> and the element contains the attribute <code>attr="one"</code> , then <code>getAttribute("attr", mapping, defaultKey, false)</code> returns <code>"1"</code>.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param valueSet
-     *            HashMap mapping keySet().iterator to values.
-     * @param defaultKey
-     *            Key to use if the attribute is missing.
-     * @param allowLiterals
-     *            <code>true</code> if literals are valid.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt><dd>
-     *            <ul>
-     *            <li><code>name != null</code> <li><code>name</code> is a valid XML identifier <li><code>valueSet</code> != null <li>the keySet().iterator of <code>valueSet</code>
-     *            are strings <li>the values of <code>valueSet</code> are strings
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name          The name of the attribute.
+     * @param valueSet      HashMap mapping keySet().iterator to values.
+     * @param defaultKey    Key to use if the attribute is missing.
+     * @param allowLiterals <code>true</code> if literals are valid.
+     *                      <dl>
+     *                      <dt><b>Preconditions:</b></dt><dd>
+     *                      <ul>
+     *                      <li><code>name != null</code> <li><code>name</code> is a valid XML identifier <li><code>valueSet</code> != null <li>the keySet().iterator of <code>valueSet</code>
+     *                      are strings <li>the values of <code>valueSet</code> are strings
+     *                      </ul>
+     *                      </dd>
+     *                      </dl>
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getStringAttribute(java.lang.String)
-     *      getStringAttribute(String)
+     * getStringAttribute(String)
      * @see XMLElement#getStringAttribute(java.lang.String, java.lang.String)
-     *      getStringAttribute(String, String)
+     * getStringAttribute(String, String)
      */
     public String getStringAttribute(String name, Map<String, Object> valueSet, String defaultKey, boolean allowLiterals) {
         return (String) this.getAttribute(name, valueSet, defaultKey, allowLiterals);
@@ -1075,26 +961,21 @@ public class XMLElement {
     /**
      * Returns an attribute of the element. If the attribute doesn't exist, <code>0</code> is returned.
      *
-     * @param name
-     *            The name of the attribute.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name The name of the attribute.
+     *             <dl>
+     *             <dt><b>Preconditions:</b></dt>
+     *             <dd>
+     *             <ul>
+     *             <li><code>name != null</code>
+     *             <li><code>name</code> is a valid XML identifier
+     *             </ul>
+     *             </dd>
+     *             </dl>
      * @see XMLElement#setIntAttribute(java.lang.String, int)
-     *      setIntAttribute(String, int)
+     * setIntAttribute(String, int)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getIntAttribute(java.lang.String, int)
-     *      getIntAttribute(String, int)
-     * @see XMLElement#getIntAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getIntAttribute(String, HashMap, String,
-     *      boolean)
+     * getIntAttribute(String, int)
      */
     public int getIntAttribute(String name) {
         return this.getIntAttribute(name, 0);
@@ -1103,27 +984,21 @@ public class XMLElement {
     /**
      * Returns an attribute of the element. If the attribute doesn't exist, <code>defaultValue</code> is returned.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param defaultValue
-     *            Key to use if the attribute is missing.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name         The name of the attribute.
+     * @param defaultValue Key to use if the attribute is missing.
+     *                     <dl>
+     *                     <dt><b>Preconditions:</b></dt>
+     *                     <dd>
+     *                     <ul>
+     *                     <li><code>name != null</code>
+     *                     <li><code>name</code> is a valid XML identifier
+     *                     </ul>
+     *                     </dd>
+     *                     </dl>
      * @see XMLElement#setIntAttribute(java.lang.String, int)
-     *      setIntAttribute(String, int)
+     * setIntAttribute(String, int)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getIntAttribute(java.lang.String) getIntAttribute(String)
-     * @see XMLElement#getIntAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getIntAttribute(String, HashMap, String,
-     *      boolean)
      */
     public int getIntAttribute(String name, int defaultValue) {
         if (ignoreCase) {
@@ -1144,35 +1019,29 @@ public class XMLElement {
     /**
      * Returns an attribute by looking up a key in a hashtable. If the attribute
      * doesn't exist, the value corresponding to defaultKey is returned.
-     * <P>
-     * As an example, if valueSet contains the mapping <code>"one" => 1</code> and the element contains the attribute <code>attr="one"</code>, then
+     * 
+     * As an example, if valueSet contains the mapping <code>"one" =&gt; 1</code> and the element contains the attribute <code>attr="one"</code>, then
      * <code>getIntAttribute("attr", mapping, defaultKey, false)</code> returns <code>1</code>.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param valueSet
-     *            HashMap mapping keySet().iterator to values.
-     * @param defaultKey
-     *            Key to use if the attribute is missing.
-     * @param allowLiteralNumbers
-     *            <code>true</code> if literal numbers are valid.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt><dd>
-     *            <ul>
-     *            <li><code>name != null</code> <li><code>name</code> is a valid XML identifier <li><code>valueSet</code> != null <li>the keySet().iterator of <code>valueSet</code>
-     *            are strings <li>the values of <code>valueSet</code> are Integer objects <li><code> defaultKey</code> is either <code>null</code>, a key in <code> valueSet</code>
-     *            or an integer.
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name                The name of the attribute.
+     * @param valueSet            HashMap mapping keySet().iterator to values.
+     * @param defaultKey          Key to use if the attribute is missing.
+     * @param allowLiteralNumbers <code>true</code> if literal numbers are valid.
+     *                            <dl>
+     *                            <dt><b>Preconditions:</b></dt><dd>
+     *                            <ul>
+     *                            <li><code>name != null</code> <li><code>name</code> is a valid XML identifier <li><code>valueSet</code> != null <li>the keySet().iterator of <code>valueSet</code>
+     *                            are strings <li>the values of <code>valueSet</code> are Integer objects <li><code> defaultKey</code> is either <code>null</code>, a key in <code> valueSet</code>
+     *                            or an integer.
+     *                            </ul>
+     *                            </dd>
+     *                            </dl>
      * @see XMLElement#setIntAttribute(java.lang.String, int)
-     *      setIntAttribute(String, int)
+     * setIntAttribute(String, int)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getIntAttribute(java.lang.String) getIntAttribute(String)
      * @see XMLElement#getIntAttribute(java.lang.String, int)
-     *      getIntAttribute(String, int)
+     * getIntAttribute(String, int)
      */
     public int getIntAttribute(String name, Map<String, Object> valueSet, String defaultKey, boolean allowLiteralNumbers) {
         if (ignoreCase) {
@@ -1204,26 +1073,21 @@ public class XMLElement {
     /**
      * Returns an attribute of the element. If the attribute doesn't exist, <code>0.0</code> is returned.
      *
-     * @param name
-     *            The name of the attribute.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name The name of the attribute.
+     *             <dl>
+     *             <dt><b>Preconditions:</b></dt>
+     *             <dd>
+     *             <ul>
+     *             <li><code>name != null</code>
+     *             <li><code>name</code> is a valid XML identifier
+     *             </ul>
+     *             </dd>
+     *             </dl>
      * @see XMLElement#setDoubleAttribute(java.lang.String, double)
-     *      setDoubleAttribute(String, double)
+     * setDoubleAttribute(String, double)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getDoubleAttribute(java.lang.String, double)
-     *      getDoubleAttribute(String, double)
-     * @see XMLElement#getDoubleAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getDoubleAttribute(String, HashMap,
-     *      String, boolean)
+     * getDoubleAttribute(String, double)
      */
     public double getDoubleAttribute(String name) {
         return this.getDoubleAttribute(name, 0.);
@@ -1232,28 +1096,22 @@ public class XMLElement {
     /**
      * Returns an attribute of the element. If the attribute doesn't exist, <code>defaultValue</code> is returned.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param defaultValue
-     *            Key to use if the attribute is missing.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name         The name of the attribute.
+     * @param defaultValue Key to use if the attribute is missing.
+     *                     <dl>
+     *                     <dt><b>Preconditions:</b></dt>
+     *                     <dd>
+     *                     <ul>
+     *                     <li><code>name != null</code>
+     *                     <li><code>name</code> is a valid XML identifier
+     *                     </ul>
+     *                     </dd>
+     *                     </dl>
      * @see XMLElement#setDoubleAttribute(java.lang.String, double)
-     *      setDoubleAttribute(String, double)
+     * setDoubleAttribute(String, double)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getDoubleAttribute(java.lang.String)
-     *      getDoubleAttribute(String)
-     * @see XMLElement#getDoubleAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getDoubleAttribute(String, HashMap,
-     *      String, boolean)
+     * getDoubleAttribute(String)
      */
     public double getDoubleAttribute(String name, double defaultValue) {
         if (ignoreCase) {
@@ -1274,36 +1132,29 @@ public class XMLElement {
     /**
      * Returns an attribute by looking up a key in a hashtable. If the attribute
      * doesn't exist, the value corresponding to defaultKey is returned.
-     * <P>
+     * 
      * As an example, if valueSet contains the mapping <code>"one" =&gt;
      * 1.0</code> and the element contains the attribute <code>attr="one"</code> , then <code>getDoubleAttribute("attr", mapping, defaultKey, false)</code> returns <code>1.0</code>.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param valueSet
-     *            HashMap mapping keySet().iterator to values.
-     * @param defaultKey
-     *            Key to use if the attribute is missing.
-     * @param allowLiteralNumbers
-     *            <code>true</code> if literal numbers are valid.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt><dd>
-     *            <ul>
-     *            <li><code>name != null</code> <li><code>name</code> is a valid XML identifier <li><code>valueSet != null</code> <li>the keySet().iterator of <code>valueSet</code>
-     *            are strings <li>the values of <code>valueSet</code> are Double objects <li><code> defaultKey</code> is either <code>null</code>, a key in <code> valueSet</code>
-     *            or a double.
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name                The name of the attribute.
+     * @param valueSet            HashMap mapping keySet().iterator to values.
+     * @param defaultKey          Key to use if the attribute is missing.
+     * @param allowLiteralNumbers <code>true</code> if literal numbers are valid.
+     *                            <dl>
+     *                            <dt><b>Preconditions:</b></dt><dd>
+     *                            </dl>
+     *                            <ul>
+     *                            <li><code>name != null</code> <li><code>name</code> is a valid XML identifier <li><code>valueSet != null</code> <li>the keySet().iterator of <code>valueSet</code>
+     *                            are strings <li>the values of <code>valueSet</code> are Double objects <li><code> defaultKey</code> is either <code>null</code>, a key in <code> valueSet</code>
+     *                            or a double.
+     *                            </ul>
      * @see XMLElement#setDoubleAttribute(java.lang.String, double)
-     *      setDoubleAttribute(String, double)
+     * setDoubleAttribute(String, double)
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#getDoubleAttribute(java.lang.String)
-     *      getDoubleAttribute(String)
+     * getDoubleAttribute(String)
      * @see XMLElement#getDoubleAttribute(java.lang.String, double)
-     *      getDoubleAttribute(String, double)
+     * getDoubleAttribute(String, double)
      */
     public double getDoubleAttribute(String name, Map<String, Object> valueSet, String defaultKey, boolean allowLiteralNumbers) {
         if (ignoreCase) {
@@ -1339,28 +1190,20 @@ public class XMLElement {
      * exception is
      * thrown.
      *
-     * @param name
-     *            The name of the attribute.
-     * @param trueValue
-     *            The value associated with <code>true</code>.
-     * @param falseValue
-     *            The value associated with <code>true</code>.
-     * @param defaultValue
-     *            Value to use if the attribute is missing.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            <li><code>trueValue</code> and <code>falseValue</code> are different strings.
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name         The name of the attribute.
+     * @param trueValue    The value associated with <code>true</code>.
+     * @param falseValue   The value associated with <code>true</code>.
+     * @param defaultValue Value to use if the attribute is missing.
+     *                     <dl>
+     *                     <dt><b>Preconditions:</b></dt>
+     *                     </dl>
+     *                     <ul>
+     *                     <li><code>name != null</code>
+     *                     <li><code>name</code> is a valid XML identifier
+     *                     <li><code>trueValue</code> and <code>falseValue</code> are different strings.
+     *                     </ul>
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#removeAttribute(java.lang.String) removeAttribute(String)
      * @see XMLElement#enumerateAttributeNames()
      */
@@ -1382,7 +1225,7 @@ public class XMLElement {
 
     /**
      * Returns the name of the element.
-     *
+     * @return The name of the element
      * @see XMLElement#setName(java.lang.String) setName(String)
      */
     public String getName() {
@@ -1392,29 +1235,23 @@ public class XMLElement {
     /**
      * Removes a child element.
      *
-     * @param child
-     *            The child element to remove.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>child != null</code>
-     *            <li><code>child</code> is a child element of the receiver
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>countChildren() => old.countChildren() - 1
-     *            <li>iterateChildren() => old.iterateChildren() - child
-     *            <li>getChildren() => old.iterateChildren() - child
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param child The child element to remove.
+     *              <dl>
+     *              <dt><b>Preconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li><code>child != null</code>
+     *              <li><code>child</code> is a child element of the receiver
+     *              </ul>
+     *              
+     *              <dl>
+     *              <dt><b>Postconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li>countChildren() =&gt; old.countChildren() - 1
+     *              <li>iterateChildren() =&gt; old.iterateChildren() - child
+     *              <li>getChildren() =&gt; old.iterateChildren() - child
+     *              </ul>
      * @see XMLElement#addChild(XMLElement) addChild(XMLElement)
      * @see XMLElement#countChildren()
      * @see XMLElement#iterateChildren()
@@ -1427,59 +1264,44 @@ public class XMLElement {
     /**
      * Removes an attribute.
      *
-     * @param name
-     *            The name of the attribute.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Postconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li>enumerateAttributeNames() => old.enumerateAttributeNames() - name
-     *            <li>getAttribute(name) => <code>null</code>
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     *            <dl>
+     * @param name The name of the attribute.
+     *             <dl>
+     *             <dt><b>Preconditions:</b></dt>
+     *             </dl>
+     *             <ul>
+     *             <li><code>name != null</code>
+     *             <li><code>name</code> is a valid XML identifier
+     *             </ul>
+     *             <dl>
+     *             <dt><b>Postconditions:</b></dt>
+     *             </dl>
+     *             <ul>
+     *             <li>enumerateAttributeNames() =&gt; old.enumerateAttributeNames() - name
+     *             <li>getAttribute(name) =&gt; <code>null</code>
+     *             </ul>
      * @see XMLElement#enumerateAttributeNames()
      * @see XMLElement#setDoubleAttribute(java.lang.String, double)
-     *      setDoubleAttribute(String, double)
+     * setDoubleAttribute(String, double)
      * @see XMLElement#setIntAttribute(java.lang.String, int)
-     *      setIntAttribute(String, int)
+     * setIntAttribute(String, int)
      * @see XMLElement#setAttribute(java.lang.String, java.lang.Object)
-     *      setAttribute(String, Object)
+     * setAttribute(String, Object)
      * @see XMLElement#getAttribute(java.lang.String) getAttribute(String)
      * @see XMLElement#getAttribute(java.lang.String, java.lang.Object)
-     *      getAttribute(String, Object)
-     * @see XMLElement#getAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getAttribute(String, HashMap, String,
-     *      boolean)
+     * getAttribute(String, Object)
      * @see XMLElement#getStringAttribute(java.lang.String)
-     *      getStringAttribute(String)
+     * getStringAttribute(String)
      * @see XMLElement#getStringAttribute(java.lang.String, java.lang.String)
-     *      getStringAttribute(String, String)
-     * @see XMLElement#getStringAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getStringAttribute(String, HashMap,
-     *      String, boolean)
+     * getStringAttribute(String, String)
      * @see XMLElement#getIntAttribute(java.lang.String) getIntAttribute(String)
      * @see XMLElement#getIntAttribute(java.lang.String, int)
-     *      getIntAttribute(String, int)
-     * @see XMLElement#getIntAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getIntAttribute(String, HashMap, String,
-     *      boolean)
+     * getIntAttribute(String, int)
      * @see XMLElement#getDoubleAttribute(java.lang.String)
-     *      getDoubleAttribute(String)
+     * getDoubleAttribute(String)
      * @see XMLElement#getDoubleAttribute(java.lang.String, double)
-     *      getDoubleAttribute(String, double)
-     * @see XMLElement#getDoubleAttribute(java.lang.String, java.util.HashMap, java.lang.String, boolean) getDoubleAttribute(String, HashMap,
-     *      String, boolean)
+     * getDoubleAttribute(String, double)
      * @see XMLElement#getBooleanAttribute(java.lang.String, java.lang.String, java.lang.String, boolean) getBooleanAttribute(String, String,
-     *      String, boolean)
+     * String, boolean)
      */
     public void removeAttribute(String name) {
         if (ignoreCase) {
@@ -1490,8 +1312,9 @@ public class XMLElement {
 
     /**
      * Creates a new similar XML element.
-     * <P>
+     * 
      * You should override this method when subclassing XMLElement.
+     * @return Similar xml element
      */
     public XMLElement createAnotherElement() {
         return new XMLElement(entities, ignoreWhitespace, false, ignoreCase);
@@ -1500,8 +1323,7 @@ public class XMLElement {
     /**
      * Changes the content string.
      *
-     * @param content
-     *            The new content string.
+     * @param content The new content string.
      */
     public void setContent(String content) {
         contents = content;
@@ -1510,18 +1332,14 @@ public class XMLElement {
     /**
      * Changes the name of the element.
      *
-     * @param name
-     *            The new name.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>name</code> is a valid XML identifier
-     *            </ul>
-     *            </dd>
-     *            </dl>
+     * @param name The new name.
+     *             <dl>
+     *             <dt><b>Preconditions:</b></dt>
+     *             </dl>
+     *             <ul>
+     *             <li><code>name != null</code>
+     *             <li><code>name</code> is a valid XML identifier
+     *             </ul>
      * @see XMLElement#getName()
      */
     public void setName(String name) {
@@ -1550,20 +1368,15 @@ public class XMLElement {
     /**
      * Writes the XML element to a writer.
      *
-     * @param writer
-     *            The writer to write the XML data to.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>writer != null</code>
-     *            <li><code>writer</code> is not closed
-     *            </ul>
-     *            </dd>
-     *            </dl>
-     * @throws java.io.IOException
-     *             If the data could not be written to the writer.
+     * @param writer The writer to write the XML data to.
+     *               <dl>
+     *               <dt><b>Preconditions:</b></dt>
+     *               </dl>
+     *               <ul>
+     *               <li><code>writer != null</code>
+     *               <li><code>writer</code> is not closed
+     *               </ul>
+     * @throws java.io.IOException If the data could not be written to the writer.
      * @see XMLElement#toString()
      */
     public void write(Writer writer) throws IOException {
@@ -1613,21 +1426,16 @@ public class XMLElement {
     /**
      * Writes a string encoded to a writer.
      *
-     * @param writer
-     *            The writer to write the XML data to.
-     * @param str
-     *            The string to write encoded.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>writer != null</code>
-     *            <li><code>writer</code> is not closed
-     *            <li><code>str != null</code>
-     *            </ul>
-     *            </dd>
-     *            </dl>
+     * @param writer The writer to write the XML data to.
+     * @param str    The string to write encoded.
+     *               <dl>
+     *               <dt><b>Preconditions:</b></dt>
+     *               </dl>
+     *               <ul>
+     *               <li><code>writer != null</code>
+     *               <li><code>writer</code> is not closed
+     *               <li><code>str != null</code>
+     *               </ul>
      */
     private void writeEncoded(Writer writer, String str) throws IOException {
         for (int i = 0; i < str.length(); i += 1) {
@@ -1687,17 +1495,13 @@ public class XMLElement {
      * Creates a parse exception for when an invalid valueset is given to a
      * method.
      *
-     * @param name
-     *            The name of the entity.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            </ul>
-     *            </dd>
-     *            </dl>
+     * @param name The name of the entity.
+     *             <dl>
+     *             <dt><b>Preconditions:</b></dt>
+     *             </dl>
+     *             <ul>
+     *             <li><code>name != null</code>
+     *             </ul>
      */
     private XMLParseException invalidValueSet(String name) {
         String msg = "Invalid value set (entity name = \"" + name + "\")";
@@ -1707,20 +1511,15 @@ public class XMLElement {
     /**
      * Creates a parse exception for when an invalid value is given to a method.
      *
-     * @param name
-     *            The name of the entity.
-     * @param value
-     *            The value of the entity.
-     *            </dl>
-     *            <dl>
-     *            <dt><b>Preconditions:</b></dt>
-     *            <dd>
-     *            <ul>
-     *            <li><code>name != null</code>
-     *            <li><code>value != null</code>
-     *            </ul>
-     *            </dd>
-     *            </dl>
+     * @param name  The name of the entity.
+     * @param value The value of the entity.
+     *              <dl>
+     *              <dt><b>Preconditions:</b></dt>
+     *              </dl>
+     *              <ul>
+     *              <li><code>name != null</code>
+     *              <li><code>value != null</code>
+     *              </ul>
      */
     private XMLParseException invalidValue(String name, String value) {
         String msg = "Attribute \"" + name + "\" does not contain a valid " + "value (\"" + value + "\")";
