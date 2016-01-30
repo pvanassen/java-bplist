@@ -3,6 +3,6 @@ jdk:
   - oraclejdk8
   - oraclejdk7
 install:
-  - mvn install -Dgpg.skip=false
+  - mvn install -Dgpg.skip=true
 after_success:
-  - mvn test jacoco:report coveralls:jacoco -Dgpg.skip=false
+  - mvn test jacoco:report coveralls:jacoco -Dgpg.skip=true
