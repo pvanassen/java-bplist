@@ -1,4 +1,5 @@
-java-bplist
+[![Build Status](https://travis-ci.org/pvanassen/java-bplist.svg?branch=develop)](https://travis-ci.org/pvanassen/java-bplist)
+Java-BPList
 ===========
 
 A Java library for reading Apple bplists, based on the work of Werner Randelshofer (http://www.randelshofer.ch/).
