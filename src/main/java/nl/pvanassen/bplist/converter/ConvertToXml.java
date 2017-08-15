@@ -213,4 +213,67 @@ public class ConvertToXml {
         xmlgc.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
         return xmlgc;
     }
+    // main function and helper functions that takes a bplist input and outputs a plist xml
+    public static void main(String[] argv){
+        if(argv.length != 2){
+            System.out.println("Usage: java nl.pvanassen.bplist.converter.ConvertToXml in.bplist out.plist");
+                return;
+        }
+        try{
+            File input = new File(argv[0]);
+            File output = new File(argv[1]);
+            FileOutputStream outputStream = new FileOutputStream(output);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+            PrintWriter writer = new PrintWriter(bufferedOutputStream);
+            ByteArrayOutputStream bOS = new ByteArrayOutputStream();
+            ConvertToXml converter = new ConvertToXml();
+            PrintWriter sOS = new PrintWriter(bOS);
+            dig(sOS, converter.convertToXml(input), 0);
+            sOS.close();
+            byte[] xmlByteArray = bOS.toByteArray();
+            ByteArrayInputStream bIS = new ByteArrayInputStream(xmlByteArray);
+            String xml = "";
+            Scanner scan = new Scanner(bIS);
+            while(scan.hasNextLine()){
+                xml += scan.nextLine() + "\n";
+            }
+            scan.close();
+            System.out.println(xml);
+            writer.print(xml);
+            writer.close();
+        }catch(Exception ex){
+            System.out.println("Welp something went wrong");
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return;
+    }
+    private static void dig(PrintWriter out, XMLElement xml, int indent){
+        String name = xml.getName();
+        // get all attribute
+        indent(out, indent);
+        out.print("<" + name);
+        Iterator<String> attributeNames = xml.enumerateAttributeNames();
+        while(attributeNames.hasNext()){
+            String attributeName = attributeNames.next();
+            out.print(" " + attributeName + "=\"" + xml.getStringAttribute(attributeName));
+        }
+        out.print(">\n");
+        Iterator<XMLElement> children = xml.iterateChildren();
+        if(!children.hasNext()){
+            indent(out, indent);
+            out.print(xml.getContent() + "\n");
+        }
+        while(children.hasNext()){
+            XMLElement child = children.next();
+            dig(out, child, indent + 1);
+        }
+        indent(out, indent);
+        out.print("</" + name + ">\n");
+    }
+    private static void indent(PrintWriter out, int indent){
+        for(int i = 0;i < indent;i++){
+            out.print("\t");
+        }
+    }
 }
