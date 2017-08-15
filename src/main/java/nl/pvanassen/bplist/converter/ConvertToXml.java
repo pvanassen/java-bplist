@@ -249,6 +249,10 @@ public class ConvertToXml {
         return;
     }
     private static void dig(PrintWriter out, XMLElement xml, int indent){
+	if(xml == null){
+		System.out.println("Something's wrong with the pblist input");
+		return;
+	}
         String name = xml.getName();
         // get all attribute
         indent(out, indent);
@@ -256,7 +260,7 @@ public class ConvertToXml {
         Iterator<String> attributeNames = xml.enumerateAttributeNames();
         while(attributeNames.hasNext()){
             String attributeName = attributeNames.next();
-            out.print(" " + attributeName + "=\"" + xml.getStringAttribute(attributeName));
+            out.print(" " + attributeName + "=\"" + xml.getStringAttribute(attributeName) + "\"");
         }
         out.print(">\n");
         Iterator<XMLElement> children = xml.iterateChildren();
