@@ -26,7 +26,7 @@ public class BinaryPListParserTest {
 
     private void testInputStreamMode(String baseName) throws IOException {
         //List<BPListElement<?>> elements = elementParser.parseObjectTable(new FileInputStream(FileHelper.getFile(baseName + ".bplist")));
-        byte[] copyBuffer = new Byte[1024];
+        byte[] copyBuffer = new byte[1024];
         int copySize = 0;
         FileInputStream testFile = new FileInputStream(FileHelper.getFile(baseName + ".bplist"));
         ByteArrayOutputStream memory = new ByteArrayOutputStream();
@@ -70,7 +70,7 @@ public class BinaryPListParserTest {
     
     @Test
     public void testInputStreamModeAirPlay() throws IOException {
-        testInputStream("airplay");
+        testInputStreamMode("airplay");
     }
     
     @Test
