@@ -1,7 +1,11 @@
 package nl.pvanassen.bplist;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.Scanner;
 
 import nl.pvanassen.bplist.converter.ConvertToXml;
 import nl.pvanassen.bplist.ext.nanoxml.XMLElement;
@@ -19,6 +23,22 @@ public class BinaryPListParserTest {
         XMLElement xmlElement = convetToXml.convertToXml(elements);
         assertNotNull(xmlElement);
         assertEquals(FileHelper.getContent(baseName + ".result"), xmlElement.getChildren().get(0).toString());
+    }
+    
+    private void testPrettyPrint(String baseName) throws IOException {
+        List<BPListElement<?>> elements = elementParser.parseObjectTable(FileHelper.getFile(baseName + ".bplist"));
+        XMLElement xmlElement = convetToXml.convertToXml(elements);
+        assertNotNull(xmlElement);
+        ByteArrayOutputStream outputBufferBOS = new ByteArrayOutputStream();
+        PrintWriter outputBufferPW = new PrintWriter(outputBufferBOS);
+        convetToXml.dig(outputBufferPW, xmlElement, 0);
+        outputBufferPW.close();
+        String output = "";
+        Scanner outputBufferScanner = new Scanner(new ByteArrayInputStream(outputBufferBOS.toByteArray()));
+        while(outputBufferScanner.hasNextLine()){
+            output += outputBufferScanner.nextLine() + "\n";
+        }
+        assertEquals(FileHelper.getContent(baseName + ".resultPrettyPrint"), output);
     }
     
     @Test
@@ -48,5 +68,8 @@ public class BinaryPListParserTest {
     public void testUTF16() throws IOException {
         test("utf16");
     }
-
+    @Test
+    public void testAirplayPrettyPrint() throws IOException {
+        testPrettyPrint("airplay");
+    }
 }

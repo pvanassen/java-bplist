@@ -213,4 +213,37 @@ public class ConvertToXml {
         xmlgc.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
         return xmlgc;
     }
+    
+    public static void dig(PrintWriter out, XMLElement xml, int indent){
+	if(xml == null){
+		System.out.println("Something's wrong with the pblist input");
+		return;
+	}
+        String name = xml.getName();
+        // get all attribute
+        indent(out, indent);
+        out.print("<" + name);
+        Iterator<String> attributeNames = xml.enumerateAttributeNames();
+        while(attributeNames.hasNext()){
+            String attributeName = attributeNames.next();
+            out.print(" " + attributeName + "=\"" + xml.getStringAttribute(attributeName) + "\"");
+        }
+        out.print(">\n");
+        Iterator<XMLElement> children = xml.iterateChildren();
+        if(!children.hasNext()){
+            indent(out, indent);
+            out.print(xml.getContent() + "\n");
+        }
+        while(children.hasNext()){
+            XMLElement child = children.next();
+            dig(out, child, indent + 1);
+        }
+        indent(out, indent);
+        out.print("</" + name + ">\n");
+    }
+    private static void indent(PrintWriter out, int indent){
+        for(int i = 0;i < indent;i++){
+            out.print("\t");
+        }
+    }
 }
