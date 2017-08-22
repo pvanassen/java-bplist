@@ -6,7 +6,9 @@
 		<real>
 		5555.0495
 		</real>
-		<key>loadedTimeRanges</key>
+		<key>
+		loadedTimeRanges
+		</key>
 		<array>
 			<dict>
 				<key>
