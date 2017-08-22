@@ -30,7 +30,7 @@ public class BinaryPListParserTest {
         int copySize = 0;
         FileInputStream testFile = new FileInputStream(FileHelper.getFile(baseName + ".bplist"));
         ByteArrayOutputStream memory = new ByteArrayOutputStream();
-        while((copySize = testFile.read(copyBuffer, 0, 1024)) != 0){
+        while((copySize = testFile.read(copyBuffer, 0, 1024)) != -1){
             memory.write(copyBuffer, 0, copySize);
         }
         testFile.close();
