@@ -21,7 +21,9 @@
 				</real>
 			</dict>
 		</array>
-		<key>seekableTimeRanges</key>
+		<key>
+		seekableTimeRanges
+		</key>
 		<array>
 			<dict>
 				<key>
