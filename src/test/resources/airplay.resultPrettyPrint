@@ -1,6 +1,8 @@
 <plist version="1.0">
 	<dict>
-		<key>duration</key>
+		<key>
+		duration
+		</key>
 		<real>
 		5555.0495
 		</real>
