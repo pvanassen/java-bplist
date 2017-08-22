@@ -31,7 +31,7 @@ public class BinaryPListParserTest {
         assertNotNull(xmlElement);
         ByteArrayOutputStream outputBufferBOS = new ByteArrayOutputStream();
         PrintWriter outputBufferPW = new PrintWriter(outputBufferBOS);
-        convertToXml.dig(xmlElement);
+        convetToXml.dig(xmlElement);
         outputBufferPW.close();
         String output = "";
         Scanner outputBufferScanner = new Scanner(new ByteArrayInputStream(outputBufferBOS.toByteArray()));
